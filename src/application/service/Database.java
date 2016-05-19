@@ -49,10 +49,34 @@ public class Database{
         }catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException se){
         	se.printStackTrace();
         }
+  		
   		updateNewEntries();
+  		deleteOldEntries();
   	}
     
-  	public void updateNewEntries(){ //updates all new entries in the database-folder
+  	private void deleteOldEntries(){ //deletes file corpses i.e. deleted files
+  		int del = 0;
+		try {	
+			Statement s = con.createStatement();
+			ResultSet res = s.executeQuery("SELECT ID, path FROM "+tableName);
+			String str ="(";
+			while(res.next()){
+	  			if(!new File(res.getString(2)).exists()){
+	  				str += res.getInt(1)+", "; //adding IDs to String
+	  				del++;
+	  			}
+	  		}
+			if(!str.equals("(")){ //not empty
+				str = str.substring(0,str.length()-2) + ")";
+				s.executeUpdate("DELETE FROM "+tableName+" WHERE ID IN "+str);
+				System.out.println("Deleted "+del+" old entries");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+  	}
+  	
+  	private void updateNewEntries(){ //updates all new entries in the database-folder
   		File db = new File(dbPath);
   		if(db.exists()){
 	  		boolean updated = false;
@@ -60,6 +84,14 @@ public class Database{
 	  		for(File f:db.listFiles()){
 	  			if(f.isDirectory()){
 	  				if(f.lastModified()>Main.prefs.getLong("lastBuild", 0)){ //folder is "unknown", bc last build did take place before his last modification
+	  					//optional: delete entries from folder
+						try {
+							Statement s = con.createStatement();
+							s.executeUpdate("DELETE FROM "+tableName+" WHERE path LIKE '"+f.getPath()+"%'");
+						} catch (SQLException e2) {
+							e2.printStackTrace();
+						}
+	  					
 	  					try { //prepare Statment
 	  						psInsert = con.prepareStatement("INSERT INTO "+tableName+"(path, title, albumartist, artist, album, trackNr, yea, bpm, rating) VALUES (?,?,?,?,?,?,?,?,?)");
 	  					} catch (SQLException e1) {
@@ -111,27 +143,6 @@ public class Database{
     	return results;
     }
     
-    public ArrayList<String> autocompleteSearch(String str){ //search the database for String <str> and maximum <limit> entries and return the results (only single entries allowed)
-    	ArrayList<String> results = new ArrayList<String>();
-    	ArrayList<ResultSet> res = new ArrayList<ResultSet>();
-    	try{
-    		long dur = System.currentTimeMillis();
-    		Statement s = con.createStatement();
-    		ResultSet r = s.executeQuery("SELECT title FROM " + tableName + " WHERE (LOWER(title) LIKE '" + str.toLowerCase() + "%')");
-    		while(r.next()){
-    			results.add(r.getString(1));
-    		}
-    		r = s.executeQuery("SELECT albumartist FROM " + tableName + " WHERE (LOWER(albumartist) LIKE '" + str.toLowerCase() + "%')");
-    		while(r.next()){
-    			results.add(r.getString(1));
-    		}
-    		s.close();
-    		System.out.println("Search finished: \""+str+"\", "+(System.currentTimeMillis()-dur)+" ms, "+results.size()+" results");
-    	}catch (SQLException se){
-        	se.printStackTrace();
-        }
-    	return results;
-    }
     
     void shutdown(){
     	try

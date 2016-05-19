@@ -53,7 +53,7 @@ import utils.Track;
 		private void searchPressed(KeyEvent ke){
 			if (ke.getCode().equals(KeyCode.ENTER) && !search.getText().isEmpty())
 	        {
-	            tracks.setItems(Main.database.search(search.getText()));
+				tracks.setItems(Main.database.search(search.getText()));
 	            tracks.requestFocus(); //sets Focus to tableview
 	            tracks.getSelectionModel().selectFirst(); //selects first row
 	        }

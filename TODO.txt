@@ -1,6 +1,6 @@
 TODOs with Prio (1 important, 2 later, 3 cosmetic)
 
-2 revise the updating of covers (backward compatible) - Mind loadnewCovers default- fucks everything up
+1 deleteoldentries
 2 tracks in tracklist show bold in databaseview (see updateTable in DbController)
 
 Ideas
