@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.Double?>
+
+<StackPane fx:id="coverView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="application.controllers.CvController" stylesheets="resources/css/StyleClasses.css">
+      
+    <Pane fx:id="staticCovers" maxHeight="300" maxWidth="480" BorderPane.alignment="CENTER">
+    	<ImageView fx:id="coverLeft" preserveRatio="true" fitHeight="150" fitWidth="150" style="-fx-opacity: 0.6; -fx-translate-y: 75; -fx-translate-x: 0;"/>
+    	<ImageView fx:id="coverRight" preserveRatio="true" fitHeight="150" fitWidth="150" style="-fx-opacity: 0.6; -fx-translate-y: 75; -fx-translate-x: 330;"/>
+    	<ImageView fx:id="coverMid" preserveRatio="true" fitHeight="300" fitWidth="300" style="-fx-translate-y: 0; -fx-translate-x: 90;"/>
+    </Pane>
+    <Pane fx:id="dynamicCovers" visible="false" maxHeight="300" maxWidth="480" BorderPane.alignment="CENTER">
+    	<ImageView fx:id="transLeftToOut" fitHeight="150" fitWidth="150"/>
+    	<ImageView fx:id="transOutToRight" fitHeight="150" fitWidth="150"/>
+    	<ImageView fx:id="transRightToMid" fitHeight="300" fitWidth="300"/>
+    	<ImageView fx:id="transMidToLeft" fitHeight="300" fitWidth="300"/>
+    </Pane>
+</StackPane>
+

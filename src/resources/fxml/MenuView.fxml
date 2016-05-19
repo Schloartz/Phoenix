@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: #E8E8E8; -fx-border-width: 0 0 1 0; -fx-border-color: #878787;" alignment="TOP_LEFT"
+stylesheets="resources/css/StyleClasses.css" fx:controller="application.controllers.MenuController">
+    <ImageView>
+    	<image>
+        	<Image url="@/resources/icons/icon_phoenix.png"/>
+    	</image>
+	</ImageView>
+	<Button text = "Switch View" prefHeight="35" prefWidth="80" onAction="#switchView" style="-fx-border-width: 0 1 0 0;">
+		<tooltip><Tooltip text="Hotkey: Alt"/></tooltip>
+	</Button>
+	<Button text = "Rebuild DB" prefHeight="35" prefWidth="80" onAction="#rebuildDBPressed" style="-fx-border-width: 0 1 0 0;">
+		<tooltip><Tooltip text="Rebuilds the Database. Caution: This takes up to 10 min!"/></tooltip>
+	</Button>
+	<Button text = "Dev Option" prefHeight="35" prefWidth="80" onAction="#dev" style="-fx-border-width: 0;"/>
+	<Region HBox.hgrow="ALWAYS" onMousePressed="#dragStarted" onMouseDragged="#dragExecuted"/>
+	<StackPane fx:id="menuProgressContainer" opacity="0.0" onMousePressed="#dragStarted" onMouseDragged="#dragExecuted">
+		<ProgressBar fx:id="menuProgress" progress="0" prefHeight="25" prefWidth="200" style="-fx-accent: #7CAFC2; -fx-background-insets: 0;" onMousePressed="#dragStarted" onMouseDragged="#dragExecuted"/>
+		<Label fx:id="menuInfo" text="Rebuilding..." StackPane.alignment="CENTER_LEFT" style="-fx-padding: 3"/>
+	</StackPane>
+	<Region HBox.hgrow="ALWAYS" onMousePressed="#dragStarted" onMouseDragged="#dragExecuted"/>
+	<ImageView fx:id="minimize" onMouseClicked="#minimize"/>
+	<ImageView fx:id="close" onMouseClicked="#shutdown"/>
+</HBox>
+

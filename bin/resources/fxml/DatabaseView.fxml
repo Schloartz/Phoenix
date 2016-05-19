@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import utils.AutoCompleteTextField?>
+
+<VBox fx:id="DatabaseView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.DbController">
+	<HBox>
+		<ImageView>
+			<image><Image url="@/resources/icons/icon_search.png"/></image>
+			<HBox.margin>
+                <Insets>
+                	<top>10</top>
+                	<right>0</right>
+                    <bottom>10</bottom>
+                    <left>10</left>
+                </Insets>
+            </HBox.margin>
+		</ImageView>
+		<AutoCompleteTextField fx:id="search" promptText="search for titles/artists/..." onKeyReleased="#searchPressed" HBox.hgrow="ALWAYS" style="-fx-font-size: 12pt; -fx-text-fill: black; -fx-border-color: #E8E8E8; -fx-border-width: 2; -fx-border-radius: 2; -fx-padding: 4;">
+			<HBox.margin>
+	                <Insets>
+	                	<top>10</top>
+	                	<right>10</right>
+	                    <bottom>10</bottom>
+	                    <left>-3</left>
+	                </Insets>
+	        </HBox.margin>
+		</AutoCompleteTextField>
+	</HBox>
+	
+	<TableView fx:id="tracks" VBox.vgrow="ALWAYS" onMouseClicked="#tracksPressed" onKeyReleased="#tracksEnter">
+	</TableView>
+</VBox>

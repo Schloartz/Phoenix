@@ -1,0 +1,15 @@
+TODOs with Prio (1 important, 2 later, 3 cosmetic)
+
+2 revise the updating of covers (backward compatible) - Mind loadnewCovers default- fucks everything up
+2 tracks in tracklist show bold in databaseview (see updateTable in DbController)
+
+Ideas
+3 Different color/icon for autodj tracks in tracklist
+3 non-square covers are stretched through transition stages and then compressed-->looks bad from about 10 px onwards
+3 implement transition for updateRightCover
+3 Option rearrange songs in tracklist (Doubleclick = Play? ...NO)
+3 Info- short note of last build
+
+Bugs
+' in search string ( Syntaxfehler: Encountered "t" at line 1, column 51.)
+when updating records for an already existing folder, old entries are not deleted

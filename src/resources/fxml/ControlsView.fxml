@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import utils.Ratingstars?>
+
+<VBox style="-fx-background-color: #E8E8E8; -fx-alignment: center-left; -fx-padding: 6; -fx-insets: 6;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="application.controllers.CController" stylesheets="resources/css/StyleClasses.css">
+ 		<StackPane fx:id="progressContainer">
+ 			<ProgressBar fx:id="trackProgress" prefWidth="800" mouseTransparent="true" progress="0"/>
+ 			<Circle fx:id="progressKnob" radius="7" fill="#878787" visible="false" StackPane.alignment="CENTER_LEFT"/>
+ 		</StackPane>
+ 		<HBox spacing="10" style ="-fx-background-color: #E8E8E8; -fx-alignment: center-left; -fx-padding: 6; -fx-insets: 6;">
+ 			<ImageView fx:id="playpause" onMouseClicked="#playPausePressed">
+ 				<image><Image url ="@/resources/icons/icon_play.png"/></image>
+ 			</ImageView>
+ 			<ImageView fx:id="forward" onMouseClicked="#forwardPressed"/>
+ 			<Separator orientation="VERTICAL"/>
+ 			<HBox>
+  			<Label fx:id="volumeLabel" text="100%" prefWidth="60" prefHeight="45" style="-fx-font-size: 14pt; -fx-font-weight: 700; -fx-text-fill: black; -fx-text-alignment: right; -fx-background-fill: white;"/>
+  			<Slider fx:id="volumeControl" maxHeight="50" orientation="VERTICAL" min="10" max="100" value="100" minorTickCount="10" blockIncrement="10" snapToTicks="true"/>
+  		</HBox>
+  		<Separator orientation="VERTICAL"/>
+  		<Ratingstars fx:id="ratingstars" alignment="CENTER"/>
+  		<Separator orientation="VERTICAL"/>
+  		<ImageView fx:id="shuffle" onMouseClicked="#shufflePressed"/>
+  		<ImageView fx:id="autodj" onMouseClicked="#autodjPressed">
+  			<image><Image url="@/resources/icons/icon_autodj_off.png"/></image>
+  		</ImageView>
+ 		</HBox>
+</VBox>
+

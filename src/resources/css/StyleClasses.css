@@ -1,0 +1,106 @@
+/*Generic Styleclasses */
+/*Normal: white #FFFFFF; lightgrey #E8E8E8; grey #878787*/
+/*- Ignore Warnings (they are useful, trust me) */
+.button{
+	-fx-background-color: #E8E8E8;
+	-fx-wrap-text: true;
+	-fx-font-size: 12;
+	-fx-text-fill: black;
+	-fx-background-radius: 0;
+	-fx-border-color: #878787;
+}
+
+.button:hover{
+	-fx-background-color: #878787;
+	-fx-text-fill: white;
+}
+
+.button:pressed{
+	-fx-background-color: #7CAFC2;
+	-fx-text-fill: white;
+}
+
+
+.list-view{
+	-fx-border-color: #E8E8E8;
+	-fx-border-insets: -3;
+	-fx-border-width: 0 0 0 3;
+}
+
+.slider .thumb{
+	-fx-background-color:#000000;
+}
+.slider .thumb:hover{ /* grey */
+	-fx-background-color:#878787;
+}
+.slider .thumb:pressed{ /* lightblue */
+	-fx-background-color:#7CAFC2;
+}
+
+.table-view .column-header{
+	-fx-background-color: #E8E8E8;
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 0 1 0 0; /* order: North, East, South, West */	
+}
+
+.table-view .filler{
+	-fx-background-color: #E8E8E8;
+}
+
+/*Custom Styleclasses */
+#root{ /*General window style*/
+	-fx-background-color: #FFFFFF;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-border-color: #878787;
+	-fx-border-width: 1;
+	-fx-border-radius: 3 3 3 3;
+	-fx-background-radius: 3 3 3 3;
+}
+
+#trackProgress{
+	-fx-accent: black;
+}
+#trackProgress .bar { 
+    -fx-padding: 3px; 
+    -fx-background-insets: 0; 
+}
+#forward{
+	-fx-image: url(/resources/icons/icon_forward.png);
+}
+#forward:hover{
+	-fx-image: url(/resources/icons/icon_forward_mouseover.png);
+}
+#forward:pressed{
+	-fx-image: url(/resources/icons/icon_forward_activated.png);
+}
+#shuffle{
+	-fx-image: url(/resources/icons/icon_shuffle.png);
+}
+
+#shuffle:hover{
+	-fx-image: url(/resources/icons/icon_shuffle_mouseover.png);
+}
+#shuffle:pressed{
+	-fx-image: url(/resources/icons/icon_shuffle_activated.png);
+}
+
+#close{
+	-fx-image: url(/resources/icons/icon_close.png);
+}
+#close:hover{
+	-fx-image: url(/resources/icons/icon_close_mouseover.png);
+}
+#close:pressed{
+	-fx-image: url(/resources/icons/icon_close_activated.png);
+}
+#minimize{
+	-fx-image: url(/resources/icons/icon_minimize.png);
+}
+
+#minimize:hover{
+	-fx-image: url(/resources/icons/icon_minimize_mouseover.png);
+}
+#minimize:pressed{
+	-fx-image: url(/resources/icons/icon_minimize_activated.png);
+}
