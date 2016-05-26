@@ -143,8 +143,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			    player.setOnEndOfMedia(new Runnable(){
 					@Override
 					public void run() {
-						disposeOldPlayer();
-						playNextSongInTracklist();
+						forwardPressed();
 					}
 			    });
 

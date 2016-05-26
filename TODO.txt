@@ -1,6 +1,6 @@
 TODOs with Prio (1 important, 2 later, 3 cosmetic)
 
-1 deleteoldentries
+1 searching of folders (sampler, genre) & filename
 2 tracks in tracklist show bold in databaseview (see updateTable in DbController)
 
 Ideas
@@ -9,7 +9,8 @@ Ideas
 3 implement transition for updateRightCover
 3 Option rearrange songs in tracklist (Doubleclick = Play? ...NO)
 3 Info- short note of last build
+3 Building time of database in min
 
 Bugs
 ' in search string ( Syntaxfehler: Encountered "t" at line 1, column 51.)
-when updating records for an already existing folder, old entries are not deleted
+file (autodj) not found throws exception
