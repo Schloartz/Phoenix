@@ -119,20 +119,36 @@ public class Database{
   		}
   	}
   	
-    public ObservableList<Track> search(String str){ //search the database for String <str> and maximum <limit> entries and return the results
+    public ObservableList<Track> search(String str){ //search the database for String <str> and return the results
     	ObservableList<Track> results = FXCollections.observableArrayList();
     	try{
     		ResultSet resultset;
     		Statement s = con.createStatement();
     		long dur = System.currentTimeMillis();
-    		resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE ("
-    				+ "(LOWER(title) LIKE '"+ str.toLowerCase() +"%') OR "
-    				+ "(LOWER(albumartist) LIKE '"+ str.toLowerCase() +"%') OR "
-    				+ "(LOWER(artist) LIKE '"+ str.toLowerCase() +"%') OR "
-    				+ "(LOWER(album) LIKE '"+ str.toLowerCase() +"%'))");
-    		
-    		while(resultset.next()){ //if there are results
-    			results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
+    		if(str.startsWith("\"") && str.endsWith("\"")){ //exact search with " "
+    			str = str.substring(1, str.length()-1);
+    			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE ("
+        				+ "(LOWER(title) = '"+ str.toLowerCase() +"') OR "
+        				+ "(LOWER(albumartist) = '"+ str.toLowerCase() +"') OR "
+        				+ "(LOWER(artist) = '"+ str.toLowerCase() +"') OR "
+        				+ "(LOWER(album) = '"+ str.toLowerCase() +"'))");
+    		}else{
+    			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE ("
+        				+ "(LOWER(title) LIKE '"+ str.toLowerCase() +"%') OR "
+        				+ "(LOWER(albumartist) LIKE '"+ str.toLowerCase() +"%') OR "
+        				+ "(LOWER(artist) LIKE '"+ str.toLowerCase() +"%') OR "
+        				+ "(LOWER(album) LIKE '"+ str.toLowerCase() +"%'))");	
+    		}
+    		if (resultset.next()) { //transfer results into array
+    		    do {
+    		    	results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
+    		    } while(resultset.next());
+    		} else { //if no results, do deeper search
+    			System.out.println("dep");
+    			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE LOWER(path) LIKE '%"+ str.toLowerCase() +"%'");
+    			while(resultset.next()){
+    		    	results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
+    		    }
     		}
     		resultset.close();
     		s.close();
@@ -300,7 +316,7 @@ public class Database{
     	}
 	}
 
-	public Track getAutoDJTrack(Track t, int mode) { //returns a track that is similar to the current track in tracklist
+	public Track requestAutoDJTrack(Track t, int mode) { //returns a track that is similar to the current track in tracklist
 		long dur = System.currentTimeMillis();
 		String currentIds = Main.tracklist.getCurrentIds();
 		

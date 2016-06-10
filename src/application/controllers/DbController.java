@@ -44,10 +44,6 @@ import utils.Track;
 			
 		}
 		
-		public void updateTable() { //TODO updates the table when songs have been added/removed
-			//tracks which are in tracklist are displayed in bold
-			
-		}
 		
 		@FXML
 		private void searchPressed(KeyEvent ke){

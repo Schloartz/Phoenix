@@ -62,9 +62,6 @@ public class TlController implements Initializable{
     	tracklist.setItems(Main.tracklist.getList());
     	//Scroll to current track
     	tracklist.scrollTo(Main.mediaplayer.getStatus().getCurrTrack());
-    	
-    	//update Databaseview
-    	Main.dbController.updateTable();
 	}
 	
 }

@@ -1,16 +1,14 @@
 TODOs with Prio (1 important, 2 later, 3 cosmetic)
 
-1 searching of folders (sampler, genre) & filename
 2 tracks in tracklist show bold in databaseview (see updateTable in DbController)
+2 rating in stars not in int in db
+2 different volume control
 
 Ideas
 3 Different color/icon for autodj tracks in tracklist
 3 non-square covers are stretched through transition stages and then compressed-->looks bad from about 10 px onwards
 3 implement transition for updateRightCover
 3 Option rearrange songs in tracklist (Doubleclick = Play? ...NO)
-3 Info- short note of last build
-3 Building time of database in min
 
 Bugs
 ' in search string ( Syntaxfehler: Encountered "t" at line 1, column 51.)
-file (autodj) not found throws exception

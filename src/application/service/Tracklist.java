@@ -138,7 +138,10 @@ public class Tracklist {
 	}
 
 	public void addAutodjTrack(int autodj) {
-		addTrack(Main.database.getAutoDJTrack(getCurrentTrack(), autodj));
+		Track newT = Main.database.requestAutoDJTrack(getCurrentTrack(), autodj);
+		if(newT!=null){
+			addTrack(newT);
+		}
 	}
 	
 }

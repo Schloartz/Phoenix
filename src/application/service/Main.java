@@ -96,7 +96,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		primaryStage.centerOnScreen();
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icons/icon_phoenix_large.png")));
 		primaryStage.show();
-		System.out.println("application-startup-time: "+(System.currentTimeMillis()-starttime)+" ms");
+		System.out.println("application-startup-time: "+((System.currentTimeMillis()-starttime)/1000)+" s");
 	}
 	
 	private void initContextMenu(){
