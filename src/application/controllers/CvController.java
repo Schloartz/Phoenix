@@ -128,7 +128,7 @@ public class CvController implements Initializable{
 	
 	public void updateCoverView(boolean dynamic) { //coordinates the change in coverview (static or dynamic)
 		loadCovers();
-		if(dynamic && Main.mainController.mediaplayerView){
+		if(dynamic && Main.mainController.view.equals("mediaplayer")){
 			prepareCoverTransition();
 			Main.cvController.staticCovers.setVisible(false);
 			Main.cvController.dynamicCovers.setVisible(true);

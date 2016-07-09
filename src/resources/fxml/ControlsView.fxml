@@ -18,10 +18,8 @@
  			</ImageView>
  			<ImageView fx:id="forward" onMouseClicked="#forwardPressed"/>
  			<Separator orientation="VERTICAL"/>
- 			<HBox>
-  			<Label fx:id="volumeLabel" text="100%" prefWidth="60" prefHeight="45" style="-fx-font-size: 14pt; -fx-font-weight: 700; -fx-text-fill: black; -fx-text-alignment: right; -fx-background-fill: white;"/>
-  			<Slider fx:id="volumeControl" maxHeight="50" orientation="VERTICAL" min="10" max="100" value="100" minorTickCount="10" blockIncrement="10" snapToTicks="true"/>
-  		</HBox>
+ 			<ImageView fx:id="volumeIcon"/>
+  			<Slider fx:id="volumeControl" maxHeight="50" orientation="VERTICAL" min="0" max="100" value="100" minorTickCount="10" blockIncrement="10" snapToTicks="true"/>
   		<Separator orientation="VERTICAL"/>
   		<Ratingstars fx:id="ratingstars" alignment="CENTER"/>
   		<Separator orientation="VERTICAL"/>

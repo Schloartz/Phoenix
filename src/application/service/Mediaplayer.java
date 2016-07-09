@@ -26,8 +26,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		//Changelistener playpause
 		playPauseListener = new ChangeListener<MediaPlayer.Status>(){
 			@Override
-			public void changed(ObservableValue<? extends Status> arg0,
-					Status arg1, Status arg2) {
+			public void changed(ObservableValue<? extends Status> arg0, Status arg1, Status arg2) {
 				Main.cController.updateControls();
 			}
 		};
@@ -110,8 +109,10 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				Main.cvController.updateCoverView(true);
 				Main.tlController.updateTracklist();
 				//Show trackInfo
-				Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.cvController.getMidCoverImage());
-				Main.trackInfo.show();
+				if(Main.mainController.showTrackInfo){
+					Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.cvController.getMidCoverImage());
+					Main.trackInfo.show();
+				}
 			}else{
 				System.out.println("ERROR with loading Media: " + Main.tracklist.getPath(status.getCurrTrack()+1));
 			}

@@ -13,6 +13,7 @@ import application.controllers.CController;
 import application.controllers.CvController;
 import application.controllers.DbController;
 import application.controllers.MenuController;
+import application.controllers.SController;
 import application.controllers.TlController;
 import application.controllers.MainController;
 import javafx.application.Application;
@@ -48,11 +49,13 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static CvController cvController;
 	public static TlController tlController;
 	public static CController cController;
+	public static SController sController;
 	
 	static double starttime;
 	
 	public static void main(String[] args){
 		starttime = System.currentTimeMillis();
+		
 		mediaplayer = new Mediaplayer();
 		tracklist = new Tracklist();
 		database = new Database();
@@ -74,7 +77,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		Scene scene = new Scene(root,800,600);
 		scene.setOnKeyReleased(e -> {
         	if(e.getCode()==KeyCode.ALT){
-        		menuController.switchView();
+        		menuController.toggleView();
         	}
         });
 		//Global Hotkeys
@@ -96,7 +99,8 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		primaryStage.centerOnScreen();
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icons/icon_phoenix_large.png")));
 		primaryStage.show();
-		System.out.println("application-startup-time: "+((System.currentTimeMillis()-starttime)/1000)+" s");
+		dbController.getSearch().requestFocus();
+		System.out.println("Application has been started ("+((System.currentTimeMillis()-starttime)/1000)+" s)");
 	}
 	
 	private void initContextMenu(){
@@ -116,7 +120,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	
 	public static void shutdown() { //shuts down all services and frees ressources
 		JIntellitype.getInstance().cleanUp();
-		if(database.running){ //close database if it is running
+		if(database.isRunning()){ //close database if it is running
 			database.shutdown();
 		}
 		mediaplayer.disposeOldPlayer();
@@ -149,10 +153,11 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 					break;
 				case C.KEY_AUTODJ: 
 					cController.autodjPressed();
-					new Flash(Main.cController.autodj.getImage()).show();
+					if(mainController.showFlash)
+						new Flash(Main.cController.autodj.getImage()).show();
 					break;
 				case C.KEY_SHUFFLE:
-					if(mediaplayer.shufflePressed()){ //if shuffle-input is valid
+					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
 						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show();
 					}
 					break;

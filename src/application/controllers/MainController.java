@@ -13,9 +13,11 @@ import utils.Track;
 public class MainController implements Initializable{ //contains methods that can ONLY be user-generated
 	
 	BorderPane root;
-	
-	public Track lastSelected = null; //stores the last selected listcell/tableviewcell
-	public boolean mediaplayerView = true; //if MusicPlayer is showing DatabaseView or CoverView
+	//Settings
+	public boolean showFlash = true;
+	public boolean showTrackInfo = true;
+	public Track lastSelected = null; //stores the last selected listcell/tableviewcell for open folder-contextmenu
+	public String view = "musiccollection"; //current view: mediaplayer/musiccollection/settings
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) { //called when view shows
@@ -23,7 +25,11 @@ public class MainController implements Initializable{ //contains methods that ca
 		//Load Database FXML
 		try {
 			//Mid Component: DatabaseView
-			FXMLLoader.load(getClass().getResource("/resources/fxml/DatabaseView.fxml"));
+			FXMLLoader.load(getClass().getResource("/resources/fxml/CoverView.fxml"));
+			//Right Component: TracklistView
+			FXMLLoader.load(getClass().getResource("/resources/fxml/TracklistView.fxml"));
+			//Mid Component: Settings
+			FXMLLoader.load(getClass().getResource("/resources/fxml/SettingsView.fxml"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -1,13 +1,31 @@
 /*Generic Styleclasses */
 /*Normal: white #FFFFFF; lightgrey #E8E8E8; grey #878787; blue #7CAFC2*/
-/*- Ignore Warnings (they are useful, trust me) */
+
+.root{ /*General window style*/
+	-fx-background-color: #FFFFFF;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-border-color: #878787;
+	-fx-border-width: 1;
+	-fx-border-radius: 3 3 3 3;
+	-fx-background-radius: 3 3 3 3;
+	-fx-font-family: Helvetica;
+}
+
+.separator .line{
+	-fx-border-color: #FFFFFF;
+	-fx-border-width: 0 1 0 0;
+}
+
 .button{
 	-fx-background-color: #E8E8E8;
 	-fx-wrap-text: true;
 	-fx-font-size: 12;
 	-fx-text-fill: black;
 	-fx-background-radius: 0;
-	-fx-border-color: #878787;
+	-fx-border-width: 0;
+	-fx-border-color: #FFFFFF;
+	-fx-font-weight: bold;
 }
 
 .button:hover{
@@ -16,6 +34,30 @@
 }
 
 .button:pressed{
+	-fx-background-color: #7CAFC2;
+	-fx-text-fill: white;
+}
+
+.toggle-button{
+	-fx-background-color: #E8E8E8;
+	-fx-wrap-text: true;
+	-fx-font-size: 12;
+	-fx-text-fill: black;
+	-fx-background-radius: 0;
+	-fx-border-color: #FFFFFF;
+	-fx-font-weight: bold;
+}
+
+.toggle-button:hover{
+	-fx-background-color: #878787;
+	-fx-text-fill: white;
+}
+.toggle-button:selected{
+	-fx-background-color: #000000;
+	-fx-text-fill: white;
+}
+
+.toggle-button:pressed{
 	-fx-background-color: #7CAFC2;
 	-fx-text-fill: white;
 }
@@ -40,7 +82,8 @@
 .table-view .column-header{
 	-fx-background-color: #E8E8E8;
 	-fx-border-color: #FFFFFF;
-	-fx-border-width: 0 1 0 0; /* order: North, East, South, West */	
+	-fx-border-width: 0 1 0 0; /* order: North, East, South, West */
+	-fx-font-weight: normal;
 }
 
 .table-view .filler{
@@ -48,15 +91,7 @@
 }
 
 /*Custom Styleclasses */
-#root{ /*General window style*/
-	-fx-background-color: #FFFFFF;
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
-	-fx-border-color: #878787;
-	-fx-border-width: 1;
-	-fx-border-radius: 3 3 3 3;
-	-fx-background-radius: 3 3 3 3;
-}
+
 
 #trackProgress{
 	-fx-accent: black;
@@ -104,3 +139,16 @@
 #minimize:pressed{
 	-fx-image: url(/resources/icons/icon_minimize_activated.png);
 }
+#search_close{
+	-fx-image: url(/resources/icons/icon_search_close.png);
+}
+#search_close:hover{
+	-fx-image: url(/resources/icons/icon_search_close_mouseover.png);
+}
+#search_close:pressed{
+	-fx-image: url(/resources/icons/icon_search_close_activated.png);
+}
+#volumeIcon{
+	-fx-image: url(/resources/icons/icon_volume.png);
+}
+

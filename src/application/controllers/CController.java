@@ -8,7 +8,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
@@ -24,14 +23,13 @@ public class CController implements Initializable{
 	@FXML
 	private StackPane progressContainer;
 	public ProgressBar trackProgress;
-	@FXML
 	public Circle progressKnob;
 	public ImageView autodj;
 	public ImageView playpause;
 	public Slider volumeControl;
-	public Label volumeLabel;
 	public Ratingstars ratingstars;
-	
+	@FXML
+	private ImageView volumeIcon;
 	@FXML
 	private static Image autodj_off, autodj_on1, autodj_on2, autodj_on3;
 	public Image playIcon;
@@ -101,9 +99,15 @@ public class CController implements Initializable{
 	    });
 	    volumeControl.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-            		//change Text & update volume in player
-            		volumeLabel.setText(new_val.intValue()+" %");
-            		Main.mediaplayer.setVolume(new_val.doubleValue()/100.0);     
+            		//change Icon & update volume in player
+            		Main.mediaplayer.setVolume(new_val.doubleValue()/100.0);
+            		if(new_val.intValue()==0){
+            			volumeIcon.setImage(new Image(getClass().getResourceAsStream("/resources/icons/icon_volume_off.png")));
+            		}else if(new_val.intValue()<=50){
+            			volumeIcon.setImage(new Image(getClass().getResourceAsStream("/resources/icons/icon_volume_half.png")));
+            		}else{
+            			volumeIcon.setImage(new Image(getClass().getResourceAsStream("/resources/icons/icon_volume.png")));
+            		}
                 }
             });
 	    initPlusOne();

@@ -1,54 +1,81 @@
 package application.controllers;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import application.service.Main;
-import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 
 public class MenuController implements Initializable{
 	private double xOffset, yOffset;
+	@FXML
+	private ToggleButton musiccollection, mediaplayer, settings;
+	@FXML
+	private ToggleGroup view;
 	
-	public StackPane menuProgressContainer;
-	public Label menuInfo;
-	public ProgressBar menuProgress;
+	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		Main.menuController = this;
 		
+		//Changelistener for ToggleGroup
+		view.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+		    public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
+		       if(new_toggle==null){ //if not toggle is selected, select the last selected (equals "one toggle needs to be selected")
+		    	   toggle.setSelected(true);
+		       }
+		    }
+		});
 	}
 	
-	@FXML
-	private void rebuildDBPressed(){
-		//Show progress in menu and rebuild the DB
-		menuProgressContainer.setOpacity(1);
-		Main.database.rebuild();
-	}
-	@FXML
-	private void dev(){ //developer option
-		
-	}
+	
 
-	public void switchView(){
-    	if(Main.mainController.mediaplayerView){ //Current View: Mediaplayer
-			Main.mainController.mediaplayerView = false;
+	public void toggleView(){
+    	if(Main.mainController.view.equals("musiccollection") || Main.mainController.view.equals("settings")){ //Current View: musiccollection or settigns
+    		switchToMediaplayer();
+			settings.setSelected(false);
+			mediaplayer.setSelected(true);
+			musiccollection.setSelected(false);
+		}else{ //Current View: mediaplayer
+			switchToMusiccollection();
+    		settings.setSelected(false);
+    		mediaplayer.setSelected(false);
+			musiccollection.setSelected(true);
+		}
+	}
+	@FXML
+	private void switchToMusiccollection(){
+		if(!Main.mainController.view.equals("musiccollection")){ //Current View: Mediaplayer
+			Main.mainController.view = "musiccollection";
     		Main.root.setRight(null);
-			Main.root.setCenter(Main.dbController.DatabaseView);
-			Main.dbController.search.requestFocus();
-		}else{ //Current View: Database
-    		Main.mainController.mediaplayerView = true;
+			Main.root.setCenter(Main.dbController.getView());
+			Main.dbController.getSearch().requestFocus();
+		}
+	}
+	@FXML
+	private void switchToMediaplayer(){
+		if(!Main.mainController.view.equals("mediaplayer")){ //Current View: Musiccollection
+			Main.mainController.view = "mediaplayer";
     		Main.root.setRight(Main.tlController.tracklist);
     		Main.root.setCenter(Main.cvController.getCoverView());
 		}
 	}
+	@FXML
+	private void switchToSettings(){
+		if(!Main.mainController.view.equals("settings")){ //Current View: Musiccollection
+			Main.mainController.view = "settings";
+    		Main.root.setRight(null);
+    		Main.root.setCenter(Main.sController.getView());
+		}
+	} 
 	
 	@FXML
 	private void minimize(){
@@ -69,16 +96,6 @@ public class MenuController implements Initializable{
         Main.stage.setY(e.getScreenY() + yOffset);
 	}
 	
-	public void updateRebuildingProgress(int searched, int max) { //updates the rebuildingProgressbar
-		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	menuProgress.setProgress((double)searched/max);
-		    	String per = new DecimalFormat("#.#").format((double)searched/max*100); //formats double to sth like 23.2%
-		    	menuInfo.setText("Rebuilding... "+ per + " %");
-		    }
-		});
-    	
-	}
+	
 	
 }

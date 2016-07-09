@@ -29,7 +29,7 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 	int order = -1; //order of the track in tracklist
 	boolean active = false; //if track is currently being played/paused
 	
-	public Track(String _path){ //initializes track with a path
+	public Track(String _path){ //initializes track with a path, rest is read-in from file system
 		try {
 			mp3 = (MP3File)AudioFileIO.read(new File(_path));
 		} catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
@@ -52,6 +52,9 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 	
 	public Track(int _id, String _path, String _title, String _albumartist, String _artist, String _album, int _trackNr, int _year, double _bpm, int _rating){ //initalizes track with (almost) all variables
 		id = _id;
+		if(_id==-1){
+			System.out.println(_path);
+		}
 		path = _path;
 		title = _title;
 		albumartist = _albumartist;

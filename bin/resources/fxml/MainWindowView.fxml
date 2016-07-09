@@ -16,14 +16,14 @@
       	<fx:include source="/resources/fxml/MenuView.fxml"/>      
       </top>
       
-      <!-- Mid Component1: CoverView -->
+      <!-- Mid Component1: DatabaseView/CoverView -->
       <center>
-      	<fx:include source="/resources/fxml/CoverView.fxml"/>
+      	<fx:include source="/resources/fxml/DatabaseView.fxml"/>
 	  </center>
 	  
 	  <!-- Right Component: Tracklist -->
 	  <right>
-	  	<fx:include source="/resources/fxml/TracklistView.fxml"/>
+		
 	  </right>
 	  
 	  <!-- Bottom Component: Controls -->

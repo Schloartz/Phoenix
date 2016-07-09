@@ -3,33 +3,89 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.Insets?>
-
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import utils.CustomTableColumn?>
 
 <VBox fx:id="DatabaseView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.DbController">
-	<HBox>
-		<ImageView>
-			<image><Image url="@/resources/icons/icon_search.png"/></image>
-			<HBox.margin>
-                <Insets>
-                	<top>10</top>
-                	<right>0</right>
-                    <bottom>10</bottom>
-                    <left>10</left>
-                </Insets>
-            </HBox.margin>
-		</ImageView>
-		<TextField fx:id="search" promptText="search for titles/artists/..." onKeyReleased="#searchPressed" HBox.hgrow="ALWAYS" style="-fx-font-size: 12pt; -fx-text-fill: black; -fx-border-color: #E8E8E8; -fx-border-width: 2; -fx-border-radius: 2; -fx-padding: 4;">
-			<HBox.margin>
-	                <Insets>
-	                	<top>10</top>
-	                	<right>10</right>
-	                    <bottom>10</bottom>
-	                    <left>-3</left>
-	                </Insets>
-	        </HBox.margin>
-		</TextField>
-	</HBox>
+	<StackPane>
+		<TextField fx:id="search" promptText="search" onKeyReleased="#searchPressed"  style="-fx-font-size: 12pt; -fx-text-fill: black;"/>
+		<ImageView fx:id="search_close" visible="false" StackPane.alignment="CENTER_RIGHT" translateX="-5" onMouseClicked="#deleteSearch"/>
+	</StackPane>
 	
 	<TableView fx:id="tracks" VBox.vgrow="ALWAYS" onMouseClicked="#tracksPressed" onKeyReleased="#tracksEnter">
+		<columns>
+			<TableColumn text="TITLE">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="title" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="ALBUMARTIST">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="albumartist" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="ARTIST">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="artist" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="ALBUM">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="album" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="#">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="trackNr" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="YEAR">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="year" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="BPM">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="bpm" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="RATING">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="rating" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="PATH">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="path" />
+      			</cellValueFactory>
+			</TableColumn>
+		</columns>
 	</TableView>
 </VBox>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+
+
+<VBox fx:id="SettingsView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.SController" spacing="10" style="-fx-padding: 10">
+	<CheckBox fx:id="trackinfo" selected="true" text="Show short info for new track"/>
+	<CheckBox fx:id="controlinfo" selected="true" text="Show flash for change in autodj"/>
+	<HBox spacing="5">
+		<Button text="Rebuild Database" onAction="#rebuildDBPressed"/>
+		<StackPane fx:id="menuProgressContainer" opacity="0">
+			<ProgressBar fx:id="menuProgress" progress="0" prefHeight="25" prefWidth="200" StackPane.alignment="CENTER_LEFT" style="-fx-accent: #7CAFC2; -fx-background-insets: 0;"/>
+			<Label fx:id="menuInfo" text="Rebuilding..." StackPane.alignment="CENTER_LEFT" style="-fx-padding: 3"/>
+		</StackPane>
+	</HBox>
+</VBox>
+

@@ -27,7 +27,7 @@ public class Flash extends Stage{ //short flash to show change of settings
 		initStyle(StageStyle.TRANSPARENT);
 		
 		StackPane p = new StackPane();
-		p.setStyle("-fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: #000000; -fx-border-width: 0.5");
+//		p.setStyle("-fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: #000000; -fx-border-width: 0.5");
 		
 		ImageView img = new ImageView(i);
 		StackPane.setAlignment(img, Pos.CENTER);

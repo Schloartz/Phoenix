@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,15 @@ public class Tracklist {
 	
 	Tracklist(){
 		list = FXCollections.observableArrayList();
+	}
+	
+	public boolean isInTracklist(Track t){ //returns if a track is in the current tracklist
+		for(Track i:list){
+			if(i.getId()==t.getId()){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String getCurrentIds(){ //returns the ids of the tracks in the tracklist
@@ -65,15 +75,6 @@ public class Tracklist {
 		Main.cvController.updateCoverView(false);
 	}
 	
-	public void addTrack(String path) {
-		if(new File(path).exists()){
-			list.add(new Track(path));
-			Main.tlController.updateTracklist();
-			Main.cvController.updateCoverView(false);
-		}else{
-			System.out.println("ERROR track ("+path+") not existing");
-		}
-	}
 	public void addTrack(Track track) {
 		if(new File(track.getPath()).exists()){
 			list.add(track);
@@ -82,6 +83,18 @@ public class Tracklist {
 		}else{
 			System.out.println("ERROR track ("+track.getPath()+") not existing");
 		}
+	}
+	
+	public void addTracks(List<Track> tracks){
+		for(Track t:tracks){
+			if(new File(t.getPath()).exists()){
+				list.add(t);
+			}else{
+				System.out.println("ERROR track ("+t.getPath()+") not existing");
+			}
+		}
+		Main.tlController.updateTracklist();
+		Main.cvController.updateCoverView(false);
 	}
 	
 	public boolean isSubsequentTrack(){ //returns if there is a subsequent track in the tracklist 

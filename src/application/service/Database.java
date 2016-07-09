@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Random;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utils.Track;
@@ -24,18 +24,18 @@ import utils.Track;
  */
 
 public class Database{
-	String dbPath = "E:/Musik/";
-	Connection con = null;
-	String tableName = "Tracks";
-	ArrayList<String> paths;
-	public boolean running = false; //if Database-Services have been started yet
+	private String dbPath = "E:/Musik/";
+	private Connection con = null;
+	private String tableName = "Tracks";
+	private boolean running = false; //if Database-Services have been started yet
 	
-	PreparedStatement psInsert;
-	int searchedFiles = 0;
-	int maxFiles = 0;
+	private PreparedStatement psInsert;
+	private int searchedFiles = 0;
+	private int maxFiles = 0;
+	private ObservableList<Track> results; //results of last search
   
   	public Database(){
-  		paths = new ArrayList<String>();
+  		results = FXCollections.observableArrayList();
   		
   		try{
         	Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
@@ -120,7 +120,7 @@ public class Database{
   	}
   	
     public ObservableList<Track> search(String str){ //search the database for String <str> and return the results
-    	ObservableList<Track> results = FXCollections.observableArrayList();
+    	results.clear();
     	try{
     		ResultSet resultset;
     		Statement s = con.createStatement();
@@ -144,7 +144,6 @@ public class Database{
     		    	results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
     		    } while(resultset.next());
     		} else { //if no results, do deeper search
-    			System.out.println("dep");
     			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE LOWER(path) LIKE '%"+ str.toLowerCase() +"%'");
     			while(resultset.next()){
     		    	results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
@@ -262,7 +261,7 @@ public class Database{
 				
 				long duration = System.currentTimeMillis() - startingTime;
 				System.out.println("Finished rebuilding Database ("+searchedFiles+" Files in "+duration/1000+"s)");
-				Main.menuController.menuProgressContainer.setOpacity(0);
+				Main.sController.hideProgress();
 			}
 		};
 		rebuild.start();
@@ -299,7 +298,7 @@ public class Database{
 			}
 			searchedFiles++;
 			if(update){
-				Main.menuController.updateRebuildingProgress(searchedFiles, maxFiles);
+				Main.sController.updateRebuildingProgress(searchedFiles, maxFiles);
 			}
 		 }
 	}
@@ -367,5 +366,13 @@ public class Database{
     		printSQLException(se);
     		return null;
     	}
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+	
+	public ObservableList<Track> getResults(){
+		return results;
 	}
 }
