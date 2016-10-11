@@ -213,7 +213,7 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 		case 5: r_conv = 255; //5
 			break;
 		}
-		rating = r_conv;
+		rating = r;
 		//save rating in tag
 		if(mp3==null){
 			mp3 = readMP3();

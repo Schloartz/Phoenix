@@ -17,7 +17,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 public class Flash extends Stage{ //short flash to show change of settings
-	double sec = 2;
+	double sec = 0.5;
 	
 	public Flash(Image i){
 		//Init GUI
@@ -27,7 +27,7 @@ public class Flash extends Stage{ //short flash to show change of settings
 		initStyle(StageStyle.TRANSPARENT);
 		
 		StackPane p = new StackPane();
-//		p.setStyle("-fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: #000000; -fx-border-width: 0.5");
+		p.setStyle("-fx-background-radius: 30;");
 		
 		ImageView img = new ImageView(i);
 		StackPane.setAlignment(img, Pos.CENTER);
@@ -39,14 +39,7 @@ public class Flash extends Stage{ //short flash to show change of settings
 		
 		//Timeline
 		Timeline timeline = new Timeline();
-		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(sec),
-			    new EventHandler<ActionEvent>() {
-			
-			        @Override
-			        public void handle(ActionEvent event) {
-			            hide();
-			        }
-			}));
+		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(sec),e-> hide()));
 		addEventHandler(WindowEvent.WINDOW_SHOWN, e -> timeline.play());
 	}
 	

@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" style="-fx-background-color: #E8E8E8; -fx-border-width: 0 0 1 0; -fx-border-color: #878787;" alignment="TOP_LEFT"
-stylesheets="resources/css/StyleClasses.css" fx:controller="application.controllers.MenuController">
+stylesheets="/resources/css/StyleClasses.css" fx:controller="application.controllers.MenuController">
     <ImageView>
     	<image>
         	<Image url="@/resources/icons/icon_phoenix.png"/>

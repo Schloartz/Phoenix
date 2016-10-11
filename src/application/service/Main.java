@@ -3,18 +3,19 @@ package application.service;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.IntellitypeListener;
 import com.melloware.jintellitype.JIntellitype;
 
-import application.controllers.CController;
-import application.controllers.CvController;
-import application.controllers.DbController;
+import application.controllers.ControlsController;
+import application.controllers.CoverviewController;
+import application.controllers.DatabaseController;
 import application.controllers.MenuController;
-import application.controllers.SController;
-import application.controllers.TlController;
+import application.controllers.SettingsController;
+import application.controllers.TracklistController;
 import application.controllers.MainController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -36,22 +37,22 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static Stage stage;
 	public static BorderPane root;
 	public static ContextMenu contextMenu;
-	public static TrackInfo trackInfo;
-	public static Preferences prefs = Preferences.userRoot().node(Main.class.getName()); //includes all user settings for database
+	static TrackInfo trackInfo;
+	private static Preferences prefs = Preferences.userRoot().node(Main.class.getName()); //includes all user settings for database
 	//PlayerController & Database
 	public static Mediaplayer mediaplayer;
 	public static Database database;
 	public static Tracklist tracklist;
 	//Controllers
 	public static MainController mainController;
-	public static DbController dbController;
+	public static DatabaseController databaseController;
 	public static MenuController menuController;
-	public static CvController cvController;
-	public static TlController tlController;
-	public static CController cController;
-	public static SController sController;
+	public static CoverviewController coverviewController;
+	public static TracklistController tracklistController;
+	public static ControlsController controlsController;
+	public static SettingsController settingsController;
 	
-	static double starttime;
+	private static double starttime;
 	
 	public static void main(String[] args){
 		starttime = System.currentTimeMillis();
@@ -99,8 +100,9 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		primaryStage.centerOnScreen();
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icons/icon_phoenix_large.png")));
 		primaryStage.show();
-		dbController.getSearch().requestFocus();
+		databaseController.getSearch().requestFocus();
 		System.out.println("Application has been started ("+((System.currentTimeMillis()-starttime)/1000)+" s)");
+
 	}
 	
 	private void initContextMenu(){
@@ -109,13 +111,19 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		openFolder.setOnAction(e -> {
 			if (Desktop.isDesktopSupported()) {
 			    try {
-					Desktop.getDesktop().open(new File(Main.mainController.lastSelected.getPath()).getParentFile());
+					Desktop.getDesktop().open(new File(mainController.lastSelected.getPath()).getParentFile());
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}
 			}
 		});
-		contextMenu.getItems().add(openFolder);
+		MenuItem updateFolder = new MenuItem("Update song");
+		updateFolder.setOnAction(event -> { //updates tags for song
+			ArrayList<File> file = new ArrayList<>();
+			file.add(new File(mainController.lastSelected.getPath()));
+			database.updateEntries(file);
+		});
+		contextMenu.getItems().addAll(updateFolder, openFolder);
 	}
 	
 	public static void shutdown() { //shuts down all services and frees ressources
@@ -130,12 +138,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	@Override
 	public void onIntellitype(int key){
     	if(key==JIntellitype.APPCOMMAND_MEDIA_PLAY_PAUSE){
-			Platform.runLater(new Runnable(){
-				@Override
-				public void run() {
-					mediaplayer.playPausePressed(); //PlayPause	
-				}
-			});
+			Platform.runLater(()-> mediaplayer.playPausePressed());
     	}
 	}
 	
@@ -152,9 +155,9 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 				case C.KEY_FORWARD: mediaplayer.forwardPressed();
 					break;
 				case C.KEY_AUTODJ: 
-					cController.autodjPressed();
+					controlsController.autodjPressed();
 					if(mainController.showFlash)
-						new Flash(Main.cController.autodj.getImage()).show();
+						new Flash(Main.controlsController.autodj.getImage()).show();
 					break;
 				case C.KEY_SHUFFLE:
 					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
@@ -168,11 +171,24 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		
 	}
 
-	public static Stage getStage() {
-		return stage;
+	private static void setStage(Stage _stage) {
+		stage = _stage;
 	}
 
-	public static void setStage(Stage _stage) {
-		stage = _stage;
+	public static long getUpdated(){ //returns the time of the last incremental database update
+		return prefs.getLong("updated",0);
+	}
+	public static long getComplete(){ //returns the time of the last full database update
+		return prefs.getLong("complete", 0);
+	}
+	static void setComplete(long t){ //sets the time of the last full database update
+		prefs.putLong("complete", t);
+		settingsController.updateComplete();
+	}
+	static void setUpdated(long t){ //sets the time of the last incremental database update
+		prefs.putLong("updated", t);
+		if(settingsController!=null){
+			settingsController.updateUpdate();
+		}
 	}
 }

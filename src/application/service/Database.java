@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.collections.FXCollections;
@@ -24,7 +25,7 @@ import utils.Track;
  */
 
 public class Database{
-	private String dbPath = "E:/Musik/";
+	private String physicalDb = "E:/Musik/";
 	private Connection con = null;
 	private String tableName = "Tracks";
 	private boolean running = false; //if Database-Services have been started yet
@@ -36,7 +37,7 @@ public class Database{
   
   	public Database(){
   		results = FXCollections.observableArrayList();
-  		
+  		//Start apache server
   		try{
         	Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
             //Get a connection
@@ -44,16 +45,61 @@ public class Database{
             running = true;
             //Print last build date
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
-            String lastBuild = sdf.format(Main.prefs.getLong("lastBuild", 0));
-            System.out.println("Database has been started. Last Build: "+lastBuild);
+            System.out.println("Database has been started.");
         }catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException se){
         	se.printStackTrace();
+			return;
         }
-  		
-  		updateNewEntries();
-  		deleteOldEntries();
+        if(new File(physicalDb).exists()){
+            updateEntries(findNewFolders());
+            deleteOldEntries();
+        }else{
+            System.out.println("ERROR while trying to read your music files at <"+physicalDb+">. Is your hard drive connected?");
+        }
   	}
-    
+
+  	void updateEntries(ArrayList<File> folders){ //updates entries in the database for the respecting folders
+		if(!folders.isEmpty()) {
+			for(File f:folders) {
+				//optional: delete old files from database
+				try {
+					Statement s = con.createStatement();
+					s.executeUpdate("DELETE FROM " + tableName + " WHERE path LIKE '" + f.getPath() + "%'");
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+
+				try { //prepare Statment
+					psInsert = con.prepareStatement("INSERT INTO " + tableName + "(path, title, albumartist, artist, album, trackNr, yea, bpm, rating) VALUES (?,?,?,?,?,?,?,?,?)");
+				} catch (SQLException e1) {
+					printSQLException(e1);
+				}
+				//iterate through folders and add to DB
+				searchedFiles = 0;
+				searchAllSubfolders(f, false);
+				try {
+					psInsert.close();
+				} catch (SQLException e) {
+					printSQLException(e);
+				}
+				System.out.println("Updated records in database for folder <" + f.getName() + ">");
+			}
+			Main.setUpdated(System.currentTimeMillis());
+		}
+	}
+
+
+	private ArrayList<File> findNewFolders(){ //returns all new folders in the database-folder
+		ArrayList<File> folders = new ArrayList<File>();
+
+		for(File f:new File(physicalDb).listFiles()){
+			if(f.isDirectory() && f.lastModified()>Main.getUpdated()){ //folder is "unknown", bc last build did take place before his last modification
+				folders.add(f);
+			}
+		}
+		return folders;
+	}
+
   	private void deleteOldEntries(){ //deletes file corpses i.e. deleted files
   		int del = 0;
 		try {	
@@ -76,48 +122,7 @@ public class Database{
 		}
   	}
   	
-  	private void updateNewEntries(){ //updates all new entries in the database-folder
-  		File db = new File(dbPath);
-  		if(db.exists()){
-	  		boolean updated = false;
-	  		
-	  		for(File f:db.listFiles()){
-	  			if(f.isDirectory()){
-	  				if(f.lastModified()>Main.prefs.getLong("lastBuild", 0)){ //folder is "unknown", bc last build did take place before his last modification
-	  					//optional: delete entries from folder
-						try {
-							Statement s = con.createStatement();
-							s.executeUpdate("DELETE FROM "+tableName+" WHERE path LIKE '"+f.getPath()+"%'");
-						} catch (SQLException e2) {
-							e2.printStackTrace();
-						}
-	  					
-	  					try { //prepare Statment
-	  						psInsert = con.prepareStatement("INSERT INTO "+tableName+"(path, title, albumartist, artist, album, trackNr, yea, bpm, rating) VALUES (?,?,?,?,?,?,?,?,?)");
-	  					} catch (SQLException e1) {
-	  						printSQLException(e1);
-	  					}
-	  					//iterate through folders and add to DB
-	  					searchedFiles = 0;
-	  					searchAllSubfolders(f,false);
-	  					try {
-	  						psInsert.close();
-	  					} catch (SQLException e) {
-	  						printSQLException(e);
-	  					}
-	  					System.out.println("Updated records in database for folder <"+f.getName()+">");
-	  					updated = true;
-	  				}
-	  			}
-	  		}
-	  		if(updated){ //if one folder has been updated, update lastBuild
-	  			long lastBuild = System.currentTimeMillis();
-				Main.prefs.putLong("lastBuild", lastBuild);
-	  		}
-  		}else{
-  			System.out.println("ERROR Skipped the updating of new entries because folder <"+dbPath+"> was not found.\nMake sure the hard drive is connected!");
-  		}
-  	}
+
   	
     public ObservableList<Track> search(String str){ //search the database for String <str> and return the results
     	results.clear();
@@ -244,11 +249,11 @@ public class Database{
 				}
 				//count all folders in medialibrary
 				searchedFiles = 0;
-				countAllFiles(new File(dbPath));
+				countAllFiles(new File(physicalDb));
 				maxFiles = searchedFiles;
 				//iterate through folders and add to DB
 				searchedFiles = 0;
-				searchAllSubfolders(new File(dbPath), true);
+				searchAllSubfolders(new File(physicalDb), true);
 				try {
 					psInsert.close();
 				} catch (SQLException e) {
@@ -256,12 +261,12 @@ public class Database{
 				}
 				//save build time in preferences
 				long lastBuild = System.currentTimeMillis();
-				Main.prefs.putLong("lastBuild", lastBuild);
-				System.out.println("Set lastBuild to "+lastBuild);
+				Main.setComplete(lastBuild);
+				System.out.println("Set last complete build to "+lastBuild);
 				
 				long duration = System.currentTimeMillis() - startingTime;
 				System.out.println("Finished rebuilding Database ("+searchedFiles+" Files in "+duration/1000+"s)");
-				Main.sController.hideProgress();
+				Main.settingsController.hideProgress();
 			}
 		};
 		rebuild.start();
@@ -298,7 +303,7 @@ public class Database{
 			}
 			searchedFiles++;
 			if(update){
-				Main.sController.updateRebuildingProgress(searchedFiles, maxFiles);
+				Main.settingsController.updateRebuildingProgress(searchedFiles, maxFiles);
 			}
 		 }
 	}
@@ -315,7 +320,7 @@ public class Database{
     	}
 	}
 
-	public Track requestAutoDJTrack(Track t, int mode) { //returns a track that is similar to the current track in tracklist
+	Track requestAutoDJTrack(Track t, int mode) { //returns a track that is similar to the current track in tracklist
 		long dur = System.currentTimeMillis();
 		String currentIds = Main.tracklist.getCurrentIds();
 		
@@ -368,7 +373,7 @@ public class Database{
     	}
 	}
 
-	public boolean isRunning() {
+	boolean isRunning() {
 		return running;
 	}
 	

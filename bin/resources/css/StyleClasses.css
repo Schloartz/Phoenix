@@ -90,7 +90,7 @@
 	-fx-background-color: #E8E8E8;
 }
 
-/*Custom Styleclasses */
+/*Custom Styleclasses - individual objects*/
 
 
 #trackProgress{
@@ -100,6 +100,16 @@
     -fx-padding: 3px; 
     -fx-background-insets: 0; 
 }
+#backward{
+	-fx-image: url(/resources/icons/icon_forward.png);
+}
+#backward:hover{
+	-fx-image: url(/resources/icons/icon_forward_mouseover.png);
+}
+#backward:pressed{
+	-fx-image: url(/resources/icons/icon_forward_activated.png);
+}
+
 #forward{
 	-fx-image: url(/resources/icons/icon_forward.png);
 }
@@ -152,3 +162,14 @@
 	-fx-image: url(/resources/icons/icon_volume.png);
 }
 
+/* Custom Styleclasses - additional effects*/
+.current_song{
+	-fx-background-color: black;
+	-fx-text-fill: white;
+}
+
+/* Custom Styleclasses - classes*/
+#trackoverlay .label{
+	-fx-text-fill: white;
+	-fx-font-size: 13pt;
+}

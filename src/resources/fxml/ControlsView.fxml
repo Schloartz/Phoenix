@@ -7,16 +7,19 @@
 <?import utils.Ratingstars?>
 
 <VBox style="-fx-background-color: #E8E8E8; -fx-alignment: center-left; -fx-padding: 6; -fx-insets: 6;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="application.controllers.CController" stylesheets="resources/css/StyleClasses.css">
+	  fx:controller="application.controllers.ControlsController" stylesheets="/resources/css/StyleClasses.css">
  		<StackPane fx:id="progressContainer">
  			<ProgressBar fx:id="trackProgress" prefWidth="800" mouseTransparent="true" progress="0"/>
  			<Circle fx:id="progressKnob" radius="7" fill="#878787" visible="false" StackPane.alignment="CENTER_LEFT"/>
  		</StackPane>
  		<HBox spacing="10" style ="-fx-background-color: #E8E8E8; -fx-alignment: center-left; -fx-padding: 6; -fx-insets: 6;">
- 			<ImageView fx:id="playpause" onMouseClicked="#playPausePressed">
- 				<image><Image url ="@/resources/icons/icon_play.png"/></image>
- 			</ImageView>
- 			<ImageView fx:id="forward" onMouseClicked="#forwardPressed"/>
+			<HBox spacing="5">
+				<ImageView fx:id="backward" rotate="180" onMouseClicked="#backwardPressed"/>
+				<ImageView fx:id="playpause" onMouseClicked="#playPausePressed">
+					<image><Image url ="@/resources/icons/icon_play.png"/></image>
+				</ImageView>
+				<ImageView fx:id="forward" onMouseClicked="#forwardPressed"/>
+			</HBox>
  			<Separator orientation="VERTICAL"/>
  			<ImageView fx:id="volumeIcon"/>
   			<Slider fx:id="volumeControl" maxHeight="50" orientation="VERTICAL" min="0" max="100" value="100" minorTickCount="10" blockIncrement="10" snapToTicks="true"/>

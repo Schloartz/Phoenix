@@ -71,15 +71,15 @@ public class Tracklist {
 			}
 		}
 		
-		Main.tlController.updateTracklist();
-		Main.cvController.updateCoverView(false);
+		Main.tracklistController.updateTracklist();
+		Main.coverviewController.updateCoverView(false);
 	}
 	
 	public void addTrack(Track track) {
 		if(new File(track.getPath()).exists()){
 			list.add(track);
-			Main.tlController.updateTracklist();
-			Main.cvController.updateCoverView(false);
+			Main.tracklistController.updateTracklist();
+			Main.coverviewController.updateCoverView(false);
 		}else{
 			System.out.println("ERROR track ("+track.getPath()+") not existing");
 		}
@@ -93,8 +93,8 @@ public class Tracklist {
 				System.out.println("ERROR track ("+t.getPath()+") not existing");
 			}
 		}
-		Main.tlController.updateTracklist();
-		Main.cvController.updateCoverView(false);
+		Main.tracklistController.updateTracklist();
+		Main.coverviewController.updateCoverView(false);
 	}
 	
 	public boolean isSubsequentTrack(){ //returns if there is a subsequent track in the tracklist 

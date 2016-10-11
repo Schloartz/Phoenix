@@ -27,7 +27,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		playPauseListener = new ChangeListener<MediaPlayer.Status>(){
 			@Override
 			public void changed(ObservableValue<? extends Status> arg0, Status arg1, Status arg2) {
-				Main.cController.updateControls();
+				Main.controlsController.updateControls();
 			}
 		};
 		    
@@ -35,8 +35,8 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 	    	@Override
 			public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
 	    		double percentage_played = (double)newValue.toSeconds()/players.get(0).getMedia().getDuration().toSeconds();
-	    		Main.cController.progressKnob.setTranslateX(percentage_played*Main.cController.trackProgress.getWidth() - 7);
-				Main.cController.trackProgress.setProgress(percentage_played);
+	    		Main.controlsController.progressKnob.setTranslateX(percentage_played*Main.controlsController.trackProgress.getWidth() - 7);
+				Main.controlsController.trackProgress.setProgress(percentage_played);
 			}
 	    };
 	}
@@ -70,6 +70,47 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		}
 		
 	}
+	public void backwardPressed(){
+		/* Cases: 1) No Songs loaded OR no last song -> do nothing
+		 * 		  2) In the first 10s of song -> switch to last
+		 * 		  3) After the first 10s of song -> rewind
+		 */
+		if(Main.tracklist.getSize()!=0 && status.getCurrTrack()!=-1){
+			if(players.get(0).getCurrentTime().toSeconds()>10){ //rewind current song
+				setPlayTime(0);
+			}else if(Main.tracklist.isPreviousTrack(status.getCurrTrack())){ //choose last song
+				disposeOldPlayer();
+				playPreviousSongInTracklist();
+			}
+		}
+	}
+
+	public void playPreviousSongInTracklist(){ //launches new with next media
+		//checks if Media is available --> adds new player
+		File mp3 = new File(Main.tracklist.getPath(status.getCurrTrack()-1));
+		//check if file exists
+		if(mp3.exists()){
+			//creates new player
+			players.add(createPlayer(new File(Main.tracklist.getPath(status.getCurrTrack()-1)).toURI().toString())); //creates new player
+			players.get(0).play();//play
+			if(status.getCurrTrack()!=-1){ //set last song inactive
+				Main.tracklist.setActive(status.getCurrTrack(), false);
+			}
+			Main.tracklist.setActive(status.getCurrTrack()-1, true);
+			status.setCurrTrack(status.getCurrTrack() - 1);
+			//GUI
+			Main.controlsController.showOrgRating();
+			Main.coverviewController.updateCoverView(false);
+			Main.tracklistController.updateTracklist();
+			//Show trackInfo
+			if(Main.mainController.showTrackInfo){
+				Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
+				Main.trackInfo.show();
+			}
+		}else{
+			System.out.println("ERROR with loading Media: " + Main.tracklist.getPath(status.getCurrTrack()+1));
+		}
+	}
 
 	public void forwardPressed() {
 		/* Cases: 1) No Songs loaded OR no next song OR first start-> do nothing 
@@ -86,7 +127,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			System.out.println("ERROR no songs in tracklist OR no next song to play");
 		}
 	}
-	
+
 	
 	
 	public void playNextSongInTracklist(){ //launches new with next media
@@ -105,19 +146,18 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				Main.tracklist.setActive(status.getCurrTrack()+1, true);
 				status.setCurrTrack(status.getCurrTrack() + 1);
 				//GUI
-				Main.cController.showOrgRating();
-				Main.cvController.updateCoverView(true);
-				Main.tlController.updateTracklist();
+				Main.controlsController.showOrgRating();
+				Main.coverviewController.updateCoverView(true);
+				Main.tracklistController.updateTracklist();
 				//Show trackInfo
 				if(Main.mainController.showTrackInfo){
-					Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.cvController.getMidCoverImage());
+					Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
 					Main.trackInfo.show();
 				}
 			}else{
 				System.out.println("ERROR with loading Media: " + Main.tracklist.getPath(status.getCurrTrack()+1));
 			}
 		}else{
-			mp3 = null;
 			System.out.println("ERROR while trying to play next Song in Tracklist: No entry in tracklist (current: " + (status.getCurrTrack()+1) + " from " + Main.tracklist.getSize() + " Songs)");
 		}
 		
@@ -138,15 +178,10 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		try{ //start new player and try to load media
 			 final Media media = new Media(mediaSource);
 			    final MediaPlayer player = new MediaPlayer(media);
-			    player.setVolume(Main.cController.volumeControl.valueProperty().doubleValue()/100.0); //initial volume
+			    player.setVolume(Main.controlsController.volumeControl.valueProperty().doubleValue()/100.0); //initial volume
 			    player.statusProperty().addListener(playPauseListener);
 			    player.currentTimeProperty().addListener(playtime);
-			    player.setOnEndOfMedia(new Runnable(){
-					@Override
-					public void run() {
-						forwardPressed();
-					}
-			    });
+			    player.setOnEndOfMedia(() -> forwardPressed());
 
 			    return player;
 			    
@@ -177,8 +212,8 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 	public boolean shufflePressed() { //shuffles upcoming songs, returns true if valid input
 		if(Main.tracklist.isSubsequentTrack()){
 			Main.tracklist.shuffle();
-			Main.tlController.updateTracklist();
-			Main.cvController.updateCoverView(false);
+			Main.tracklistController.updateTracklist();
+			Main.coverviewController.updateCoverView(false);
 			return true;
 		}else{
 			System.out.println("ERROR while trying to shuffle upcoming songs. No upcoming songs found!");
@@ -198,9 +233,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 	public utils.Status getStatus() {
 		return status;
 	}
-	public void setStatus(utils.Status status) {
-		this.status = status;
-	}
+
 
 	
 }

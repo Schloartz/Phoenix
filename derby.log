@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Mon Jun 13 11:36:08 CEST 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0155-491e-4396-000006767008 
-on database directory D:\Programmierung\Phoenix\MusicDatabase with class loader sun.misc.Launcher$AppClassLoader@4e0e2f2a 
+Tue Oct 11 15:29:32 CEST 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0157-b3ef-11ad-000006efb130 
+on database directory D:\Programmierung\Phoenix\MusicDatabase with class loader sun.misc.Launcher$AppClassLoader@63947c6b 
 Loaded from file:/D:/Programmierung/libraries/db-derby-10.12.1.1-bin/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_73-b02
+java.runtime.version=1.8.0_101-b13
 user.dir=D:\Programmierung\Phoenix
 os.name=Windows 10
 os.arch=amd64
@@ -12,8 +12,8 @@ os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
-Mon Jun 13 11:36:47 CEST 2016: Shutting down Derby engine
+Tue Oct 11 15:30:20 CEST 2016: Shutting down Derby engine
 ----------------------------------------------------------------
-Mon Jun 13 11:36:47 CEST 2016:
-Shutting down instance a816c00e-0155-491e-4396-000006767008 on database directory D:\Programmierung\Phoenix\MusicDatabase with class loader sun.misc.Launcher$AppClassLoader@4e0e2f2a 
+Tue Oct 11 15:30:20 CEST 2016:
+Shutting down instance a816c00e-0157-b3ef-11ad-000006efb130 on database directory D:\Programmierung\Phoenix\MusicDatabase with class loader sun.misc.Launcher$AppClassLoader@63947c6b 
 ----------------------------------------------------------------

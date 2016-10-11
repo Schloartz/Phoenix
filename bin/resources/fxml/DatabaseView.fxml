@@ -6,7 +6,7 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import utils.CustomTableColumn?>
 
-<VBox fx:id="DatabaseView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.DbController">
+<VBox fx:id="DatabaseView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.DatabaseController">
 	<StackPane>
 		<TextField fx:id="search" promptText="search" onKeyReleased="#searchPressed"  style="-fx-font-size: 12pt; -fx-text-fill: black;"/>
 		<ImageView fx:id="search_close" visible="false" StackPane.alignment="CENTER_RIGHT" translateX="-5" onMouseClicked="#deleteSearch"/>

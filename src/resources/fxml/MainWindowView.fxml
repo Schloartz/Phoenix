@@ -9,7 +9,7 @@
 
 <!-- ID warnings useless bc they are used in css -->
 <BorderPane fx:id="root" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="application.controllers.MainController" stylesheets="resources/css/StyleClasses.css">
+      fx:controller="application.controllers.MainController" stylesheets="/resources/css/StyleClasses.css">
       
       <!-- Top Component: Menu -->
       <top>

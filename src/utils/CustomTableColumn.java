@@ -45,16 +45,18 @@ public class CustomTableColumn<S, T> implements Callback<TableColumn<S, T>, Tabl
 			            	}
 		            	}
                 	}
+                	//for all cells
+					setContextMenu(Main.contextMenu);
+					addEventFilter(MouseEvent.MOUSE_CLICKED, e -> { //add to Tracklist
+						if (e.getClickCount() > 1) {
+							Main.tracklist.addTrack(Main.mainController.lastSelected);
+						}
+					});
                 }
             }
 		 };
 		 
-    	cell.setContextMenu(Main.contextMenu);
-    	cell.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> { //add to Tracklist
-	        if (e.getClickCount() > 1) {
-	            Main.tracklist.addTrack((Track) cell.getTableRow().getItem());
-	        }
-		});
+
     	
         return cell;
 	    }

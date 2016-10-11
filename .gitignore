@@ -47,9 +47,15 @@ Temporary Items
 .apdisk
 
 # My Ignore Settings
+.idea/
+.settings/
 GUI/
 MusicDatabase/
+
+dll/
 *.psd
 *.indd
 *.ai
 TODO.txt
+
+

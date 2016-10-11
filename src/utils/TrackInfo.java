@@ -2,8 +2,6 @@ package utils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -21,18 +19,18 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 public class TrackInfo extends Stage{
-	Scene trackInfoScene;
-	ImageView coverview;
-	Label trackInfoText;
-	Timeline trackInfoTimeline;
+	private ImageView coverview;
+	private Label trackInfoText;
+	private Timeline trackInfoTimeline;
+	private double sec = 4;
 	//Ratingstars
-	ImageView star1,star2,star3,star4,star5;
-	Image star_empty = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_empty.png"));
-	Image star_full = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_full.png"));
-	Image star_mouseover = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_mouseover.png"));
+	private ImageView star1,star2,star3,star4,star5;
+	private Image star_empty = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_empty.png"));
+	private Image star_full = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_full.png"));
+
 	
 	
-	public TrackInfo(){ //initalizes the components of the trackinfo-flash
+	public TrackInfo(){ //initializes the components of the trackinfo-flash
 		
 		setAlwaysOnTop(true);
 		setX(C.SCREEN_WIDTH-220-15);
@@ -77,20 +75,11 @@ public class TrackInfo extends Stage{
 		rightSide.getChildren().addAll(trackInfoText,rating);
 		
 		trackInfoContainer.getChildren().addAll(coverview, rightSide);
-		trackInfoScene = new Scene(trackInfoContainer,220,110); //220
-		
-		setScene(trackInfoScene);
+		setScene(new Scene(trackInfoContainer,220,110));
 		
 		//Timeline to hide trackInfo
 		trackInfoTimeline = new Timeline();
-		trackInfoTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(4),
-		    new EventHandler<ActionEvent>() {
-		
-		        @Override
-		        public void handle(ActionEvent event) {
-		            hide();
-		        }
-		}));
+		trackInfoTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(sec),e-> hide()));
 	}
 	
 	public void updateCoverTextRating(Track t, WritableImage wi) {
