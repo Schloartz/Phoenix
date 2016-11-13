@@ -35,7 +35,6 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 	    	@Override
 			public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
 	    		double percentage_played = (double)newValue.toSeconds()/players.get(0).getMedia().getDuration().toSeconds();
-	    		Main.controlsController.progressKnob.setTranslateX(percentage_played*Main.controlsController.trackProgress.getWidth() - 7);
 				Main.controlsController.trackProgress.setProgress(percentage_played);
 			}
 	    };
@@ -44,6 +43,19 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		if(players.size()!=0){
     		players.get(0).setVolume(val);
     	}
+	}
+	public void toggleMute(){
+		if(players.size()!=0){
+			double vol = players.get(0).getVolume();
+			if(vol>0){
+				getStatus().setOldVolume(vol);
+				setVolume(0);
+				Main.controlsController.volumeControl.setValue(0);
+			}else{
+				setVolume(getStatus().getOldVolume());
+				Main.controlsController.volumeControl.setValue(getStatus().getOldVolume());
+			}
+		}
 	}
 	public void playPausePressed() {
 		/*Cases: 1) No Songs loaded or all Songs played -> Do nothing
@@ -68,8 +80,8 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		}else{
 			System.out.println("ERROR no songs in tracklist");
 		}
-		
 	}
+
 	public void backwardPressed(){
 		/* Cases: 1) No Songs loaded OR no last song -> do nothing
 		 * 		  2) In the first 10s of song -> switch to last
@@ -78,14 +90,14 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		if(Main.tracklist.getSize()!=0 && status.getCurrTrack()!=-1){
 			if(players.get(0).getCurrentTime().toSeconds()>10){ //rewind current song
 				setPlayTime(0);
-			}else if(Main.tracklist.isPreviousTrack(status.getCurrTrack())){ //choose last song
+			}else if(Main.tracklist.isPreviousTrack(1)){ //choose last song
 				disposeOldPlayer();
 				playPreviousSongInTracklist();
 			}
 		}
 	}
 
-	public void playPreviousSongInTracklist(){ //launches new with next media
+	private void playPreviousSongInTracklist(){ //launches new with next media
 		//checks if Media is available --> adds new player
 		File mp3 = new File(Main.tracklist.getPath(status.getCurrTrack()-1));
 		//check if file exists
@@ -100,7 +112,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			status.setCurrTrack(status.getCurrTrack() - 1);
 			//GUI
 			Main.controlsController.showOrgRating();
-			Main.coverviewController.updateCoverView(false);
+			Main.coverviewController.updateCoverView(true, "backward");
 			Main.tracklistController.updateTracklist();
 			//Show trackInfo
 			if(Main.mainController.showTrackInfo){
@@ -116,7 +128,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		/* Cases: 1) No Songs loaded OR no next song OR first start-> do nothing 
 		 * 		  2) Playing/Paused current song -> switch to next
 		 */
-		if(Main.tracklist.getSize()!=0 && Main.tracklist.isSubsequentTrack() && status.getCurrTrack()!=-1){//there is a next track
+		if(Main.tracklist.getSize()!=0 && Main.tracklist.isSubsequentTrack(1) && status.getCurrTrack()!=-1){//there is a next track
 			disposeOldPlayer();
 			playNextSongInTracklist();
 		}else if(Main.tracklist.getSize()!=0 && status.getAutodj()!=0 && status.getCurrTrack()!=-1){ //one track loaded and autodj on
@@ -130,10 +142,10 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 
 	
 	
-	public void playNextSongInTracklist(){ //launches new with next media
+	private void playNextSongInTracklist(){ //launches new with next media
 		//checks if Media is available --> adds new player
 		File mp3; //mp3 to be played
-		if(Main.tracklist.isSubsequentTrack()){ //checks if there is another entry in tracklist
+		if(Main.tracklist.isSubsequentTrack(1)){ //checks if there is another entry in tracklist
 			mp3 = new File(Main.tracklist.getPath(status.getCurrTrack()+1));
 			//check if file exists
 			if(mp3!=null && mp3.exists()){
@@ -147,7 +159,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				status.setCurrTrack(status.getCurrTrack() + 1);
 				//GUI
 				Main.controlsController.showOrgRating();
-				Main.coverviewController.updateCoverView(true);
+				Main.coverviewController.updateCoverView(true, "forward");
 				Main.tracklistController.updateTracklist();
 				//Show trackInfo
 				if(Main.mainController.showTrackInfo){
@@ -163,7 +175,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		
 	}
 	
-	public void disposeOldPlayer(){
+	void disposeOldPlayer(){
 		//halt old player if it exists
 		if(players.size()!=0){
 			players.get(0).stop();
@@ -178,11 +190,10 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		try{ //start new player and try to load media
 			 final Media media = new Media(mediaSource);
 			    final MediaPlayer player = new MediaPlayer(media);
-			    player.setVolume(Main.controlsController.volumeControl.valueProperty().doubleValue()/100.0); //initial volume
+			    player.setVolume(Main.controlsController.volumeControl.valueProperty().doubleValue()); //initial volume
 			    player.statusProperty().addListener(playPauseListener);
 			    player.currentTimeProperty().addListener(playtime);
 			    player.setOnEndOfMedia(() -> forwardPressed());
-
 			    return player;
 			    
 		}catch(Exception e){
@@ -210,10 +221,10 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 
 
 	public boolean shufflePressed() { //shuffles upcoming songs, returns true if valid input
-		if(Main.tracklist.isSubsequentTrack()){
+		if(Main.tracklist.isSubsequentTrack(1)){
 			Main.tracklist.shuffle();
 			Main.tracklistController.updateTracklist();
-			Main.coverviewController.updateCoverView(false);
+			Main.coverviewController.updateCoverView(false, "nothing");
 			return true;
 		}else{
 			System.out.println("ERROR while trying to shuffle upcoming songs. No upcoming songs found!");

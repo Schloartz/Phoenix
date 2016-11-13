@@ -1,15 +1,14 @@
 TODOs with Prio (1 important, 2 later, 3 cosmetic)
 
-1 ratingstars as control on cover with infos
+1 disable num input
+1 flash shows last image not current
+2 escape ' characters while doing SQL
 2 minimize by click on taskbaricon (seems tricky https://stackoverflow.com/questions/26972683/javafx-minimizing-undecorated-stage#27254024)
-2 update rating in table after new set rating
 2 search in path after nothing is found
-
 
 Ideas
 3 update song does not update tableview but should!
 3 Different color/icon for autodj tracks in tracklist
-3 implement transition for updateRightCover
 3 Option rearrange songs in tracklist (Doubleclick = Play? ...NO)
 
 

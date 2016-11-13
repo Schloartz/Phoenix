@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.event.*?>
+
 
 <!-- Layouting of the PhoenixApp -->
 
 <!-- ID warnings useless bc they are used in css -->
 <BorderPane fx:id="root" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="application.controllers.MainController" stylesheets="resources/css/StyleClasses.css">
+      fx:controller="application.controllers.MainController" stylesheets="/resources/css/StyleClasses.css">
       
       <!-- Top Component: Menu -->
       <top>

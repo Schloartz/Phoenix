@@ -72,14 +72,14 @@ public class Tracklist {
 		}
 		
 		Main.tracklistController.updateTracklist();
-		Main.coverviewController.updateCoverView(false);
+		Main.coverviewController.updateCoverView(false, "nothing");
 	}
 	
 	public void addTrack(Track track) {
 		if(new File(track.getPath()).exists()){
 			list.add(track);
 			Main.tracklistController.updateTracklist();
-			Main.coverviewController.updateCoverView(false);
+			Main.coverviewController.updateCoverView(false, "nothing");
 		}else{
 			System.out.println("ERROR track ("+track.getPath()+") not existing");
 		}
@@ -94,17 +94,17 @@ public class Tracklist {
 			}
 		}
 		Main.tracklistController.updateTracklist();
-		Main.coverviewController.updateCoverView(false);
+		Main.coverviewController.updateCoverView(false, "nothing");
 	}
 	
-	public boolean isSubsequentTrack(){ //returns if there is a subsequent track in the tracklist 
-		if(list.size()>0 && list.size()>Main.mediaplayer.getStatus().getCurrTrack()+1){
+	public boolean isSubsequentTrack(int i){ //returns if there is a subsequent track in the tracklist
+		if(list.size()>0 && list.size()>Main.mediaplayer.getStatus().getCurrTrack()+i){
 			return true;
 		}else{
 			return false;
 		}
 	}
-	public boolean isPreviousTrack(int i) {//returns if there is a previous track (1:previous, 2:preprevious) in the tracklist 
+	public boolean isPreviousTrack(int i) {//returns if there is a previous track (1:previous, 2:pre-previous) in the tracklist
 		if(Main.mediaplayer.getStatus().getCurrTrack()>=i){
 			return true;
 		}else{

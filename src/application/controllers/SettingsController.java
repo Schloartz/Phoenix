@@ -61,9 +61,9 @@ public class SettingsController implements Initializable{
 		menuProgressContainer.setOpacity(0);
 	}
 	public void updateUpdate(){ //updates the label for the last time the database was incrementally built
-		update.setText(DateFormat.getDateInstance().format(Main.getUpdated())+" "+DateFormat.getTimeInstance().format(Main.getUpdated()));
+		Platform.runLater(()-> update.setText(DateFormat.getDateInstance().format(Main.getUpdated())+" "+DateFormat.getTimeInstance().format(Main.getUpdated())));
 	}
 	public void updateComplete(){ //updates the label for the last time the database was fully built
-		complete.setText(DateFormat.getDateInstance().format(Main.getComplete())+" "+DateFormat.getTimeInstance().format(Main.getComplete()));
+		Platform.runLater(()-> complete.setText(DateFormat.getDateInstance().format(Main.getComplete())+" "+DateFormat.getTimeInstance().format(Main.getComplete())));
 	}
 }

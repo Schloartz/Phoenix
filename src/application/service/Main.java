@@ -23,7 +23,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -148,20 +150,20 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	        @Override
 	        public void run() {
 	        	switch(key){
-				case C.KEY_BACKWARD: //PlayerController.backwardPressed();
+				case C.KEY_BACKWARD: mediaplayer.backwardPressed();
 					break;
 				case C.KEY_PLAYPAUSE: mediaplayer.playPausePressed();
 					break;
 				case C.KEY_FORWARD: mediaplayer.forwardPressed();
 					break;
-				case C.KEY_AUTODJ: 
-					controlsController.autodjPressed();
+				case C.KEY_AUTODJ:
+					Platform.runLater(() -> controlsController.autodjPressed());
 					if(mainController.showFlash)
-						new Flash(Main.controlsController.autodj.getImage()).show();
+						new Flash(Main.controlsController.autodj.getGraphic()).show();
 					break;
 				case C.KEY_SHUFFLE:
 					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
-						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show();
+						new Flash(new ImageView(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png")))).show();
 					}
 					break;
 				}

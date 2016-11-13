@@ -14,7 +14,7 @@
 	<HBox spacing="5">
 		<Button text="Rebuild Database" onAction="#rebuildDBPressed"/>
 		<StackPane fx:id="menuProgressContainer" opacity="0">
-			<ProgressBar fx:id="menuProgress" progress="0" prefHeight="25" prefWidth="200" StackPane.alignment="CENTER_LEFT" style="-fx-accent: #7CAFC2; -fx-background-insets: 0;"/>
+			<ProgressBar fx:id="menuProgress" progress="0" prefHeight="25" prefWidth="200" StackPane.alignment="CENTER_LEFT"/>
 			<Label fx:id="menuInfo" text="Rebuilding..." StackPane.alignment="CENTER_LEFT" style="-fx-padding: 3"/>
 		</StackPane>
 	</HBox>
@@ -24,7 +24,7 @@
 	<Region prefHeight="999"/>
 	<HBox>
 		<Region HBox.hgrow="SOMETIMES"/>
-		<Label text="Version: 0.25.1 // Date: 11.10.2016 // Author: Nash"/>
+		<Label text="Version: 0.25.2 // Date: 21.10.2016 // Author: Nash"/>
 		<Region HBox.hgrow="SOMETIMES"/>
 	</HBox>
 </VBox>

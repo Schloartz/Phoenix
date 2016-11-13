@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import javafx.collections.FXCollections;
@@ -264,8 +265,8 @@ public class Database{
 				Main.setComplete(lastBuild);
 				System.out.println("Set last complete build to "+lastBuild);
 				
-				long duration = System.currentTimeMillis() - startingTime;
-				System.out.println("Finished rebuilding Database ("+searchedFiles+" Files in "+duration/1000+"s)");
+				long duration = (System.currentTimeMillis() - startingTime)/1000; //duration in s
+				System.out.println("Finished rebuilding Database ("+searchedFiles+" Files in "+(duration-duration%60)/60+"m "+duration%60+"s)");
 				Main.settingsController.hideProgress();
 			}
 		};

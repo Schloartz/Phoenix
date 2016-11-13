@@ -1,23 +1,23 @@
 package utils;
 
 public final class C { //CONSTANT VARIABLES: contains all final variables
-//	//Display
+	//Display
 	public static double SCREEN_WIDTH = 1920;
 	public static double SCREEN_HEIGHT = 1080;
-//	//GUI
+	//GUI
 	public static final double WIDTH = 800; //width of the scene
 	public static final double HEIGHT= 600; //height of the scene
-//	
-	public static final double BIGCOVER = 300; //size of big cover in the center
-	public static final double SMALLCOVER = 150; //size of small covers at the side
+
+	//public static final double BIGCOVER = 300; //size of big cover in the center - for documentation only
+	//public static final double SMALLCOVER = 150; //size of small covers at the side - for documentation only
 	public static final double SMALLCOVER_VISIBLE = 90; //90 of 150 visible, 60 px hidden
-//	
+
 	public static final double MENU_HEIGHT = 25; //height of menubar (observed)
 	public static final double CONTROLS_HEIGHT = 78; //height of controls (observed)
-//	
+
 	public static final double TRANSFORM = 32.5; //extent of transform of left and right covers
 	public static final double X_MARGIN = (WIDTH*3/4 - 90 - 90 - 300) /2; //60; Margin left and right
-	public static final double Y_MARGIN = (HEIGHT - MENU_HEIGHT - CONTROLS_HEIGHT - BIGCOVER) /2; //98.5; Margin top and bottom
+	public static final double Y_MARGIN = (HEIGHT - MENU_HEIGHT - CONTROLS_HEIGHT - 300) /2; //98.5; Margin top and bottom
 	
 	//Hotkey support for jintellitype (Numpad)
 	///Internal KeyCodes (arbitrary): correspond to numpad keys

@@ -34,7 +34,6 @@ import utils.Track;
 
 			//TableView tracks
 			tracks.setPlaceholder(new Label("Nothing to display :("));
-			tracks.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 			tracks.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 			//give search focus
 			search.requestFocus();

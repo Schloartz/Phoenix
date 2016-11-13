@@ -2,19 +2,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import utils.CustomTableColumn?>
 
 <VBox fx:id="DatabaseView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.DatabaseController">
 	<StackPane>
-		<TextField fx:id="search" promptText="search" onKeyReleased="#searchPressed"  style="-fx-font-size: 12pt; -fx-text-fill: black;"/>
+		<TextField fx:id="search" promptText="search" onKeyReleased="#searchPressed"/>
 		<ImageView fx:id="search_close" visible="false" StackPane.alignment="CENTER_RIGHT" translateX="-5" onMouseClicked="#deleteSearch"/>
 	</StackPane>
 	
 	<TableView fx:id="tracks" VBox.vgrow="ALWAYS" onMouseClicked="#tracksPressed" onKeyReleased="#tracksEnter">
+		<columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
 		<columns>
-			<TableColumn text="TITLE">
+			<TableColumn text="TITLE" prefWidth="160">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -22,7 +22,7 @@
         			<PropertyValueFactory property="title" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="ALBUMARTIST">
+			<TableColumn text="ALBUMARTIST" prefWidth="100">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -30,7 +30,7 @@
         			<PropertyValueFactory property="albumartist" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="ARTIST">
+			<TableColumn text="ARTIST" prefWidth="100">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -38,7 +38,7 @@
         			<PropertyValueFactory property="artist" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="ALBUM">
+			<TableColumn text="ALBUM" prefWidth="100">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -46,7 +46,7 @@
         			<PropertyValueFactory property="album" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="#">
+			<TableColumn text="#" prefWidth="25">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -54,7 +54,7 @@
         			<PropertyValueFactory property="trackNr" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="YEAR">
+			<TableColumn text="YEAR" prefWidth="40">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -62,7 +62,7 @@
         			<PropertyValueFactory property="year" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="BPM">
+			<TableColumn text="BPM" prefWidth="45">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -70,7 +70,7 @@
         			<PropertyValueFactory property="bpm" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="RATING">
+			<TableColumn text="RATING" prefWidth="80">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -78,7 +78,7 @@
         			<PropertyValueFactory property="rating" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="PATH">
+			<TableColumn text="PATH" prefWidth="145">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
