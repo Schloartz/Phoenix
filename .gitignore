@@ -49,13 +49,13 @@ Temporary Items
 # My Ignore Settings
 .idea/
 .settings/
+dll/
 GUI/
 MusicDatabase/
+out/
+src/resources/icons
 
-dll/
-*.psd
-*.indd
-*.ai
+derby.log
 TODO.txt
 
 
