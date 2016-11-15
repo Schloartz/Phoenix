@@ -16,12 +16,11 @@ public class TracklistCell extends ListCell<Track>{ //Cell for tracklist (listce
         	//text label
         	setText(t.getTitle() + " - " +t.getArtist());
 
-            if(Main.tracklist.getList().indexOf(t)<Main.mediaplayer.getStatus().getCurrTrack()){
+            if(!t.getActive()){
             	getStyleClass().remove("current_song");
-            }else if(getIndex()==Main.mediaplayer.getStatus().getCurrTrack()){ //if track is being played right now
+            }else{ //if track is being played right now
                 getStyleClass().add("current_song");
-            }else{
-                getStyleClass().remove("current_song");
+                System.out.println("cs:"+t.getTitle());
             }
           
             setContextMenu(Main.contextMenu);

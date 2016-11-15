@@ -55,8 +55,7 @@ public class MenuController implements Initializable{
 	private void switchToMusiccollection(){
 		if(!Main.mainController.view.equals("musiccollection")){
 			Main.mainController.view = "musiccollection";
-    		Main.root.setRight(null);
-			Main.root.setCenter(Main.databaseController.getView());
+			Main.getRoot().setCenter(Main.databaseController.getView());
 			Main.databaseController.getSearch().requestFocus();
 		}
 	}
@@ -64,16 +63,14 @@ public class MenuController implements Initializable{
 	private void switchToMediaplayer(){
 		if(!Main.mainController.view.equals("mediaplayer")){
 			Main.mainController.view = "mediaplayer";
-    		Main.root.setRight(Main.tracklistController.tracklist);
-    		Main.root.setCenter(Main.coverviewController.getCoverView());
+    		Main.getRoot().setCenter(Main.coverviewController.getCoverView());
 		}
 	}
 	@FXML
 	private void switchToSettings(){
 		if(!Main.mainController.view.equals("settings")){
 			Main.mainController.view = "settings";
-    		Main.root.setRight(null);
-    		Main.root.setCenter(Main.settingsController.getView());
+    		Main.getRoot().setCenter(Main.settingsController.getView());
 		}
 	} 
 	

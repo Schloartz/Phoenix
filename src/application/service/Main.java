@@ -19,6 +19,7 @@ import application.controllers.TracklistController;
 import application.controllers.MainController;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
@@ -37,10 +38,12 @@ import utils.TrackInfo;
 
 public class Main extends Application implements IntellitypeListener, HotkeyListener{
 	public static Stage stage;
-	public static BorderPane root;
+	@FXML
+	private static BorderPane root;
 	public static ContextMenu contextMenu;
 	static TrackInfo trackInfo;
 	private static Preferences prefs = Preferences.userRoot().node(Main.class.getName()); //includes all user settings for database
+	private static HotkeyListener hotkeyListener;
 	//PlayerController & Database
 	public static Mediaplayer mediaplayer;
 	public static Database database;
@@ -55,7 +58,8 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static SettingsController settingsController;
 	
 	private static double starttime;
-	
+
+
 	public static void main(String[] args){
 		starttime = System.currentTimeMillis();
 		
@@ -68,6 +72,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	
 	@Override
 	public void start(Stage primaryStage) {
+		hotkeyListener = this;
 		setStage(primaryStage);
 		root = null;
 		//Load FXML
@@ -85,8 +90,8 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
         });
 		//Global Hotkeys
 		JIntellitype.getInstance();
-		JIntellitype.getInstance().addIntellitypeListener(this);
-		JIntellitype.getInstance().addHotKeyListener(this);
+		JIntellitype.getInstance().addIntellitypeListener(this); //intellitype for playpause mediabutton
+		JIntellitype.getInstance().addHotKeyListener(hotkeyListener); //hotkeylistener for num inputs
 		JIntellitype.getInstance().registerHotKey(C.KEY_BACKWARD, 0, C.KEY_NUM4); //0: no key associated
 		JIntellitype.getInstance().registerHotKey(C.KEY_PLAYPAUSE, 0, C.KEY_NUM5);
 		JIntellitype.getInstance().registerHotKey(C.KEY_FORWARD, 0, C.KEY_NUM6);
@@ -157,13 +162,14 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 				case C.KEY_FORWARD: mediaplayer.forwardPressed();
 					break;
 				case C.KEY_AUTODJ:
+					if(mainController.showFlash) {
+						new Flash(controlsController.returnNextAutodjIcon(mediaplayer.getStatus().getAutodj())).show();
+					}
 					Platform.runLater(() -> controlsController.autodjPressed());
-					if(mainController.showFlash)
-						new Flash(Main.controlsController.autodj.getGraphic()).show();
 					break;
 				case C.KEY_SHUFFLE:
 					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
-						new Flash(new ImageView(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png")))).show();
+						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show();
 					}
 					break;
 				}
@@ -193,4 +199,13 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 			settingsController.updateUpdate();
 		}
 	}
+
+	public static void toggleNumInput(boolean bool){ //enables/disables input via numpad
+		if(bool){
+			JIntellitype.getInstance().addHotKeyListener(hotkeyListener);
+		}else{
+			JIntellitype.getInstance().removeHotKeyListener(hotkeyListener);
+		}
+	}
+	public static BorderPane getRoot(){ return root;}
 }

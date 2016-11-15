@@ -17,7 +17,7 @@ public class MainController implements Initializable{ //contains methods that ca
 	public boolean showFlash = true;
 	public boolean showTrackInfo = true;
 	public Track lastSelected = null; //stores the last selected listcell/tableviewcell for open folder-contextmenu
-	public String view = "musiccollection"; //current view: mediaplayer/musiccollection/settings
+	String view = "musiccollection"; //current view: mediaplayer/musiccollection/settings
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) { //called when view shows

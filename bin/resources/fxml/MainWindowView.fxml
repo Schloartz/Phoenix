@@ -20,7 +20,7 @@
 	  
 	  <!-- Right Component: Tracklist -->
 	  <right>
-		
+		  <fx:include source="/resources/fxml/TracklistView.fxml"/>
 	  </right>
 	  
 	  <!-- Bottom Component: Controls -->

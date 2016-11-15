@@ -2,7 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import utils.Ratingstars?>
+<?import utils.RatingObjects?>
+
+
 
 <VBox fx:id="controlsRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
 	  fx:controller="application.controllers.ControlsController" stylesheets="/resources/css/StyleClasses.css">
@@ -17,9 +19,11 @@
  				<Button fx:id="volumeIcon" onMouseClicked="#volumePressed"/>
   				<Slider fx:id="volumeControl" maxHeight="50" orientation="VERTICAL" max="1" value="1.0" majorTickUnit="0.1" snapToTicks="true"/>
 			</HBox>
-			<Ratingstars fx:id="ratingstars" alignment="CENTER"/>
+			<RatingObjects fx:id="ratingObjects" alignment="CENTER"/>
+
 			<Button fx:id="shuffle" onMouseClicked="#shufflePressed"/>
 			<Button fx:id="autodj" onMouseClicked="#autodjPressed"/>
+
  		</HBox>
 </VBox>
 

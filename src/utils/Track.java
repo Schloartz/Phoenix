@@ -3,7 +3,10 @@ package utils;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -19,15 +22,14 @@ import org.jaudiotagger.tag.images.Artwork;
 import application.service.Main;
 
 public class Track extends MP3File{ //represents a physical mp3 file with tags and properties of current player
-	
-	int id = -1; //id in database (also shows if track is listed in database (!=-1)
-	MP3File mp3; //representation of mp3
-	String title, albumartist, artist, album, path;
-	int trackNr, year, rating;
-	double bpm;
-	BufferedImage cover;
-	int order = -1; //order of the track in tracklist
-	boolean active = false; //if track is currently being played/paused
+
+	private int id = -1; //id in database (also shows if track is listed in database (!=-1)
+	private MP3File mp3; //representation of mp3
+	private String title, albumartist, artist, album, path;
+	private int trackNr, year, rating;
+	private double bpm;
+	private BufferedImage cover;
+	private boolean active = false; //if track is currently being played/paused
 	
 	public Track(String _path){ //initializes track with a path, rest is read-in from file system
 		try {
@@ -67,27 +69,26 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 		///cover excluded due to performance issues
 		
 	}
+
 	private MP3File readMP3(){
 		try {
-			MP3File m = (MP3File)AudioFileIO.read(new File(path));
-			return m;
+			return (MP3File)AudioFileIO.read(new File(path));
 		} catch (CannotReadException | IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
 			System.out.println("ERROR reading mp3 ("+path+")");
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public int readTrackNr() { //reads Track number of mp3 file, returns 0 if no tag was found
-		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.TRACK)!=""){
-			int t = Integer.parseInt(mp3.getTag().getFirst(FieldKey.TRACK));
-			return t;
+
+	private int readTrackNr() { //reads Track number of mp3 file, returns 0 if no tag was found
+		if(mp3.getTag()!=null && !Objects.equals(mp3.getTag().getFirst(FieldKey.TRACK), "")){
+			return Integer.parseInt(mp3.getTag().getFirst(FieldKey.TRACK));
 		}else{
 			return 0;
 		}
 	}
 
-	public BufferedImage readCover() { //returns cover as bufferedimage OR null if there is no cover
+	private BufferedImage readCover() { //returns cover as bufferedimage OR null if there is no cover
 		BufferedImage bi = null;
 		if(mp3.getTag()!=null && mp3.getTag().getFirstArtwork()!=null){
 			Artwork artwork = mp3.getTag().getFirstArtwork();
@@ -99,11 +100,11 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 		}
 		return bi;
 	}
-	public int readRating(){ //returns rating of this mp3 from tag(0-255 -> 0-5) or 0 if not found;
+	private int readRating(){ //returns rating of this mp3 from tag(0-255 -> 0-5) or 0 if not found;
 		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.RATING)!=null){
 			int raw_rating = 0; //raw value
 			int conv_rating = 0; //converted rating
-			String str = null;
+			String str;
 			try{
 				str = mp3.getTag().getFirst(FieldKey.RATING); //parse Rating from tag
 				if(str.equals("")){ //no rating corresponds to "" in tag!
@@ -131,49 +132,43 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 			}
 //			System.out.println("rating from "+raw_rating + " to " + conv_rating);
 			return conv_rating;
+		}else return 0;
+	}
+
+
+
+
+	private String readTitle(){ //returns title of track
+		if(mp3.getTag()!=null && !Objects.equals(mp3.getTag().getFirst(FieldKey.TITLE), "")){
+			return mp3.getTag().getFirst(FieldKey.TITLE);
 		}else{
-			return 0;
+			return null;
+		}
+	}
+	private String readArtist(){ //returns artist of track
+		if(mp3.getTag()!=null && !Objects.equals(mp3.getTag().getFirst(FieldKey.ARTIST), "")){
+			return mp3.getTag().getFirst(FieldKey.ARTIST);
+		}else{
+			return null;
 		}
 	}
 
-	
+	private String readAlbumArtist(){ //returns albumartist of track
+		if(mp3.getTag()!=null && !Objects.equals(mp3.getTag().getFirst(FieldKey.ALBUM_ARTIST), "")){
+			return mp3.getTag().getFirst(FieldKey.ALBUM_ARTIST);
+		}else{
+			return null;
+		}
+	}
 
-	
-	public String readTitle(){ //returns title of track
-		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.TITLE)!=""){
-			String s = mp3.getTag().getFirst(FieldKey.TITLE);
-			return s;
+	private String readAlbum(){ //returns album of track
+		if(mp3.getTag()!=null && !Objects.equals(mp3.getTag().getFirst(FieldKey.ALBUM), "")){
+			return mp3.getTag().getFirst(FieldKey.ALBUM);
 		}else{
 			return null;
 		}
 	}
-	public String readArtist(){ //returns artist of track
-		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.ARTIST)!=""){
-			String s = mp3.getTag().getFirst(FieldKey.ARTIST);
-			return s;
-		}else{
-			return null;
-		}
-	}
-	
-	public String readAlbumArtist(){ //returns albumartist of track
-		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.ALBUM_ARTIST)!=""){
-			String s = mp3.getTag().getFirst(FieldKey.ALBUM_ARTIST);
-			return s;
-		}else{
-			return null;
-		}
-	}
-	
-	public String readAlbum(){ //returns album of track
-		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.ALBUM)!=""){
-			String s = mp3.getTag().getFirst(FieldKey.ALBUM);
-			return s;
-		}else{
-			return null;
-		}
-	}
-	public int readYear(){ //returns year of track; tag normally contains one of the following ("   0";"";"2012-05-15";"2012")
+	private int readYear(){ //returns year of track; tag normally contains one of the following ("   0";"";"2012-05-15";"2012")
 		int y = 0; //int year to be determined
 		if(mp3.getTag()!=null && !mp3.getTag().getFirst(FieldKey.YEAR).isEmpty() && !mp3.getTag().getFirst(FieldKey.YEAR).equals("   0")){
 			String year = mp3.getTag().getFirst(FieldKey.YEAR);
@@ -189,10 +184,9 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 		}
 		return y;
 	}
-	public double readBPM(){ //returns BPM of track
-		if(mp3.getTag()!=null && mp3.getTag().getFirst(FieldKey.BPM)!=""){
-			Double t = Double.parseDouble(mp3.getTag().getFirst(FieldKey.BPM));
-			return t;
+	private double readBPM(){ //returns BPM of track
+		if(mp3.getTag()!=null && !Objects.equals(mp3.getTag().getFirst(FieldKey.BPM), "")){
+			return Double.parseDouble(mp3.getTag().getFirst(FieldKey.BPM));
 		}else{
 			return 0;
 		}
@@ -219,6 +213,7 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 			mp3 = readMP3();
 		}
 		try {
+			assert mp3 != null;
 			mp3.getTag().setField(FieldKey.RATING,String.valueOf(r_conv));
 			mp3.commit();
 		} catch (KeyNotFoundException | FieldDataInvalidException | CannotWriteException e) {
@@ -234,56 +229,30 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 	public void setActive(boolean value) {
 		active = value;
 	}
-
+	boolean getActive(){ return active; }
 	public String getPath() {
 		return path;
 	}
-
-	public boolean isActive() {
-		return active;
-	}
-	
 	public String getTitle() {
 		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	public String getAlbumartist() {
 		return albumartist;
 	}
-	public void setAlbumartist(String albumartist) {
-		this.albumartist = albumartist;
-	}
 	public String getArtist() {
 		return artist;
-	}
-	public void setArtist(String artist) {
-		this.artist = artist;
 	}
 	public String getAlbum() {
 		return album;
 	}
-	public void setAlbum(String album) {
-		this.album = album;
-	}
 	public int getTrackNr() {
 		return trackNr;
-	}
-	public void setTrackNr(int trackNr) {
-		this.trackNr = trackNr;
 	}
 	public int getYear() {
 		return year;
 	}
-	public void setYear(int year) {
-		this.year = year;
-	}
 	public double getBpm() {
 		return bpm;
-	}
-	public void setBpm(int bpm) {
-		this.bpm = bpm;
 	}
 	public int getRating() {
 		return rating;
@@ -294,9 +263,6 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 			cover = readCover();
 		}
 		return cover;
-	}
-	public void setCover(BufferedImage cover) {
-		this.cover = cover;
 	}
 	public int getId(){
 		return id;

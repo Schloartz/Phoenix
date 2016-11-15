@@ -23,7 +23,7 @@ public class TrackInfo extends Stage{
 	private Label trackInfoText;
 	private Timeline trackInfoTimeline;
 	private double sec = 4;
-	//Ratingstars
+	//RatingObjects
 	private ImageView star1,star2,star3,star4,star5;
 	private Image star_empty = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_empty.png"));
 	private Image star_full = new Image(TrackInfo.class.getResourceAsStream("/resources/icons/ratingstar_full.png"));

@@ -70,13 +70,6 @@
 	-fx-background-color: highlight-color2;
 }
 
-
-.list-view{
-	-fx-border-color: foreground-color;
-	-fx-border-insets: -3;
-	-fx-border-width: 0 0 0 3;
-}
-
 .slider .thumb{
 	-fx-background-color: state-color;
 }
@@ -143,6 +136,11 @@
 	-fx-max-height: 999;
 }
 
+#ratingObjects{
+	-fx-spacing: 3px;
+	-fx-padding: 0 6px 0 6px;
+}
+
 #shuffle{
 	-fx-graphic: url(/resources/icons/icon_shuffle.png);
 	-fx-max-height: 999;
@@ -191,14 +189,13 @@
 	-fx-padding: 6px;
 	-fx-insets: 6px;
 }
+
 #bottomControlsRoot{
 	-fx-background-color: foreground-color;
 	-fx-alignment: center-left;
 	-fx-padding: 3px 0 0 0;
 }
-#bottomControlsRoot .button{
-	-fx-content-display: graphic-only;
-}
+
 #trackoverlay{
 	-fx-background-color: rgba(0,0,0,0.3);
 }
@@ -209,9 +206,6 @@
 #search{
 	-fx-font-size: 12pt;
 	-fx-text-fill: black;
-	-fx-background-color: white;
-}
-#tracklist{
 	-fx-background-color: white;
 }
 
@@ -234,6 +228,19 @@
 	-fx-text-fill: highlight-color2;
 	-fx-text-alignment: center;
 	-fx-wrap-text: true;
+}
+
+
+#tracklistRoot{
+	-fx-background-color: foreground-color;
+
+}
+
+#tracklist{
+	-fx-padding: 0px;
+	-fx-background-insets: 0;
+	-fx-border-color: foreground-color;
+	-fx-border-width: 0 0 0 3;
 }
 
 /* Custom Styleclasses - additional effects*/

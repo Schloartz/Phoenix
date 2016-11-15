@@ -21,10 +21,11 @@
 	<Region prefHeight="8"/>
 	<CheckBox fx:id="trackinfo" selected="true" text="Show short info for new track"/>
 	<CheckBox fx:id="controlinfo" selected="true" text="Show flash for change in autodj"/>
+	<CheckBox fx:id="numinput" selected="true" text="Enable hotkey input via numpad"/>
 	<Region prefHeight="999"/>
 	<HBox>
 		<Region HBox.hgrow="SOMETIMES"/>
-		<Label text="Version: 0.25.2 // Date: 21.10.2016 // Author: Nash"/>
+		<Label text="Version: 0.25.3 // Date: 14.11.2016 // Author: Nash"/>
 		<Region HBox.hgrow="SOMETIMES"/>
 	</HBox>
 </VBox>

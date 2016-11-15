@@ -13,7 +13,7 @@ import javafx.util.Duration;
 public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpdate
 	
 	private utils.Status status;
-	public  ArrayList<MediaPlayer> players = new ArrayList<MediaPlayer>(); //contains only one element, the current player
+	public  ArrayList<MediaPlayer> players = new ArrayList<>(); //contains only one element, the current player
 	
 	private  ChangeListener<Status> playPauseListener;
 	private  ChangeListener<Duration> playtime;
@@ -24,20 +24,12 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		status = new utils.Status(-1,0);
 		
 		//Changelistener playpause
-		playPauseListener = new ChangeListener<MediaPlayer.Status>(){
-			@Override
-			public void changed(ObservableValue<? extends Status> arg0, Status arg1, Status arg2) {
-				Main.controlsController.updateControls();
-			}
-		};
+		playPauseListener = (arg0, arg1, arg2) -> Main.controlsController.updateControls();
 		    
-	    playtime = new ChangeListener<Duration>(){
-	    	@Override
-			public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-	    		double percentage_played = (double)newValue.toSeconds()/players.get(0).getMedia().getDuration().toSeconds();
-				Main.controlsController.trackProgress.setProgress(percentage_played);
-			}
-	    };
+	    playtime = (observable, oldValue, newValue) -> {
+            double percentage_played = (double)newValue.toSeconds()/players.get(0).getMedia().getDuration().toSeconds();
+            Main.controlsController.trackProgress.setProgress(percentage_played);
+        };
 	}
 	public void setVolume(double val){
 		if(players.size()!=0){
@@ -193,7 +185,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			    player.setVolume(Main.controlsController.volumeControl.valueProperty().doubleValue()); //initial volume
 			    player.statusProperty().addListener(playPauseListener);
 			    player.currentTimeProperty().addListener(playtime);
-			    player.setOnEndOfMedia(() -> forwardPressed());
+			    player.setOnEndOfMedia(this::forwardPressed);
 			    return player;
 			    
 		}catch(Exception e){

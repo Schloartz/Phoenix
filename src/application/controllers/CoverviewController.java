@@ -182,8 +182,8 @@ public class CoverviewController implements Initializable{
 			Main.coverviewController.staticCovers.setVisible(false);
 			Main.coverviewController.dynamicCovers.setVisible(true);
 			//BorderPane doesn't clip its children
-			Main.root.setRight(null);
-			Main.root.setRight(Main.tracklistController.tracklist);
+//			Main.root.setRight(null);
+//			Main.root.setRight(Main.tracklistController.getView());
 			if(mode.equals("forward")){
 				forwardAnimation.play();
 			}else if(mode.equals("backward")){

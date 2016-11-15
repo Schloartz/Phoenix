@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import application.service.Main;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -15,19 +14,14 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import utils.Ratingstars;
+import utils.RatingObjects;
 
 public class ControlsController implements Initializable{
 
 	public ProgressBar trackProgress;
 	public Button autodj, playpause;
 	public Slider volumeControl;
-	public Ratingstars ratingstars;
+	public RatingObjects ratingObjects;
 	@FXML
 	private Button volumeIcon;
 	@FXML
@@ -93,21 +87,21 @@ public class ControlsController implements Initializable{
 	}
 
 	public void autodjPressed(){ //has to be public due to Intellij-access
+		Main.mediaplayer.autodjPressed();
 		switch(Main.mediaplayer.getStatus().getAutodj()){
-			case 0: autodj.setGraphic(autodj_on1);
+			case 0: autodj.setGraphic(autodj_off);
 				break;
-			case 1: autodj.setGraphic(autodj_on2);
+			case 1: autodj.setGraphic(autodj_on1);
 				break;
-			case 2: autodj.setGraphic(autodj_on3);
+			case 2: autodj.setGraphic(autodj_on2);
 				break;
-			case 3: autodj.setGraphic(autodj_off);
+			case 3: autodj.setGraphic(autodj_on3);
 				break;
 		}
-		Main.mediaplayer.autodjPressed();
 	}
 	
 	public void showOrgRating() {
-		ratingstars.showOrgRating();
+		ratingObjects.showOrgRating();
 	}
 	
 	public void updateControls() {		
@@ -127,4 +121,15 @@ public class ControlsController implements Initializable{
 		Tooltip.install(autodj, tooltip);
 		
 	}
+
+	public Image returnNextAutodjIcon(int i){ //returns the autodj-icon for a given number
+		switch(i){
+			case 0: return autodj_on1.getImage();
+			case 1: return autodj_on2.getImage();
+			case 2: return autodj_on3.getImage();
+			case 3: return autodj_off.getImage();
+			default: return null;
+		}
+	}
+
 }

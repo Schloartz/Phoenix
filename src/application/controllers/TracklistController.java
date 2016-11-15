@@ -1,44 +1,46 @@
 package application.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import application.service.Main;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
+import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.util.Callback;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import utils.Track;
 import utils.TracklistCell;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public class TracklistController implements Initializable{
 
-	public ListView<Track> tracklist;
+	@FXML
+	private VBox tracklistRoot;
+	@FXML
+	private Button arrow;
+	@FXML
+	private StackPane foldContainer;
+	@FXML
+	private HBox horizLabel;
+	@FXML
+	private ListView<Track> tracklist;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Main.tracklistController = this;
-		
+
 		tracklist.setItems(Main.tracklist.getList());
 		tracklist.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-	    tracklist.setCellFactory(new Callback<ListView<Track>, ListCell<Track>>(){
-            @Override
-            public ListCell<Track> call(ListView<Track> p) {
-                 return new TracklistCell();
-            }
-        });
+	    tracklist.setCellFactory(p -> new TracklistCell());
 	    tracklist.setOnKeyReleased(ke -> {
 			if(ke.getCode()==KeyCode.DELETE) {
 				ObservableList<Integer> i = tracklist.getSelectionModel().getSelectedIndices();
@@ -47,7 +49,8 @@ public class TracklistController implements Initializable{
 				}
 			}
 	    });
-		
+		//start: tracklist folded
+		foldTracklist();
 	}
 	
 	@FXML
@@ -56,13 +59,27 @@ public class TracklistController implements Initializable{
 	}
 	
 	public void updateTracklist(){
-    	//force update tracklistview
-    	tracklist.setItems(null);
-    	tracklist.setItems(Main.tracklist.getList());
+		//force update tracklistview
+		System.out.println("updatetl");
+//		tracklist.setItems(null);
+//		tracklist.setItems(Main.tracklist.getList());
     	//Scroll to current track
     	tracklist.scrollTo(Main.mediaplayer.getStatus().getCurrTrack());
     	//update tracksTable
     	Main.databaseController.updateTable();
 	}
-	
+	@FXML
+	private void foldTracklist(){
+		if(arrow.getGraphic().getRotate()==180){ //open->fold it
+			tracklistRoot.getChildren().remove(tracklist);
+			foldContainer.getChildren().remove(horizLabel);
+			arrow.getGraphic().setRotate(0);
+		}else{ //closed->open it
+			tracklistRoot.getChildren().add(tracklist);
+			foldContainer.getChildren().add(0,horizLabel);
+			arrow.getGraphic().setRotate(180);
+			updateTracklist();
+		}
+	}
+
 }

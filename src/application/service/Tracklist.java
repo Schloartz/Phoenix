@@ -26,7 +26,7 @@ public class Tracklist {
 		return false;
 	}
 	
-	public String getCurrentIds(){ //returns the ids of the tracks in the tracklist
+	String getCurrentIds(){ //returns the ids of the tracks in the tracklist
 		String ids = "(";
 		for(Track t:list){
 			ids += " " + t.getId() + ",";
@@ -98,21 +98,13 @@ public class Tracklist {
 	}
 	
 	public boolean isSubsequentTrack(int i){ //returns if there is a subsequent track in the tracklist
-		if(list.size()>0 && list.size()>Main.mediaplayer.getStatus().getCurrTrack()+i){
-			return true;
-		}else{
-			return false;
-		}
+		return list.size() > 0 && list.size() > Main.mediaplayer.getStatus().getCurrTrack() + i;
 	}
 	public boolean isPreviousTrack(int i) {//returns if there is a previous track (1:previous, 2:pre-previous) in the tracklist
-		if(Main.mediaplayer.getStatus().getCurrTrack()>=i){
-			return true;
-		}else{
-			return false;
-		}
+		return Main.mediaplayer.getStatus().getCurrTrack() >= i;
 	}
 	
-	public void setActive(int index, boolean value){ //sets the track with index an active of value
+	void setActive(int index, boolean value){ //sets the track with index an active of value
 		list.get(index).setActive(value);
 	}
 	public int getRating(int index){ //returns rating of current song
@@ -122,11 +114,8 @@ public class Tracklist {
 	public ObservableList<Track> getList(){ //returns current tracklist
 		return list;
 	}
-	public String getPath(int index){ //gets the path of song at index
+	String getPath(int index){ //gets the path of song at index
 		return list.get(index).getPath();
-	}
-	public boolean isActive(int index){ //if the song is active i.e. being paused or player right now
-		return list.get(index).isActive();
 	}
 	public int getSize(){
 		return list.size();
@@ -140,8 +129,8 @@ public class Tracklist {
 		}
 	}
 
-	public void shuffle() {
-		ArrayList<Track> tempList = new ArrayList<Track>();
+	void shuffle() {
+		ArrayList<Track> tempList = new ArrayList<>();
 		for(int i = Main.mediaplayer.getStatus().getCurrTrack()+1;i<getSize();i++){ //cycle through all upcoming tracks 
 			tempList.add(list.get(i));
 		}
@@ -150,11 +139,10 @@ public class Tracklist {
 		list.addAll(tempList);
 	}
 
-	public void addAutodjTrack(int autodj) {
+	void addAutodjTrack(int autodj) {
 		Track newT = Main.database.requestAutoDJTrack(getCurrentTrack(), autodj);
 		if(newT!=null){
 			addTrack(newT);
 		}
 	}
-	
 }

@@ -125,39 +125,46 @@ public class Database{
   	
 
   	
-    public ObservableList<Track> search(String str){ //search the database for String <str> and return the results
+    public ObservableList<Track> search(String str_org){ //search the database for String <str> and return the results
     	results.clear();
+		//escape quotes (')
+		String str = str_org;
+		if(str.contains("'")){
+			str = str_org.replace("'", "''");
+		}
+		str = str.toLowerCase();
+
     	try{
     		ResultSet resultset;
     		Statement s = con.createStatement();
     		long dur = System.currentTimeMillis();
     		if(str.startsWith("\"") && str.endsWith("\"")){ //exact search with " "
-    			str = str.substring(1, str.length()-1);
+				str = str.substring(1, str.length()-1);
     			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE ("
-        				+ "(LOWER(title) = '"+ str.toLowerCase() +"') OR "
-        				+ "(LOWER(albumartist) = '"+ str.toLowerCase() +"') OR "
-        				+ "(LOWER(artist) = '"+ str.toLowerCase() +"') OR "
-        				+ "(LOWER(album) = '"+ str.toLowerCase() +"'))");
+        				+ "(LOWER(title) = '"+ str +"') OR "
+        				+ "(LOWER(albumartist) = '"+ str +"') OR "
+        				+ "(LOWER(artist) = '"+ str +"') OR "
+        				+ "(LOWER(album) = '"+ str +"'))");
     		}else{
     			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE ("
-        				+ "(LOWER(title) LIKE '"+ str.toLowerCase() +"%') OR "
-        				+ "(LOWER(albumartist) LIKE '"+ str.toLowerCase() +"%') OR "
-        				+ "(LOWER(artist) LIKE '"+ str.toLowerCase() +"%') OR "
-        				+ "(LOWER(album) LIKE '"+ str.toLowerCase() +"%'))");	
+        				+ "(LOWER(title) LIKE '"+ str +"%') OR "
+        				+ "(LOWER(albumartist) LIKE '"+ str +"%') OR "
+        				+ "(LOWER(artist) LIKE '"+ str +"%') OR "
+        				+ "(LOWER(album) LIKE '"+ str +"%'))");
     		}
     		if (resultset.next()) { //transfer results into array
     		    do {
     		    	results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
     		    } while(resultset.next());
     		} else { //if no results, do deeper search
-    			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE LOWER(path) LIKE '%"+ str.toLowerCase() +"%'");
+    			resultset = s.executeQuery("SELECT * FROM "+tableName+" WHERE LOWER(path) LIKE '%"+ str +"%'");
     			while(resultset.next()){
     		    	results.add(new Track(resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getString(4), resultset.getString(5), resultset.getString(6), resultset.getInt(7), resultset.getInt(8), resultset.getDouble(9),resultset.getInt(10)));
     		    }
     		}
     		resultset.close();
     		s.close();
-    		System.out.println("Search finished: \""+str+"\", "+(System.currentTimeMillis()-dur)+" ms, "+results.size()+" results");
+    		System.out.println("Search finished: \""+str_org+"\", "+(System.currentTimeMillis()-dur)+" ms, "+results.size()+" results");
     	}catch (SQLException se){
         	se.printStackTrace();
         }
