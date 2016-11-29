@@ -11,14 +11,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import utils.C;
 import utils.Track;
 import utils.TracklistCell;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TracklistController implements Initializable{
@@ -33,6 +38,7 @@ public class TracklistController implements Initializable{
 	private HBox horizLabel;
 	@FXML
 	private ListView<Track> tracklist;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -49,6 +55,23 @@ public class TracklistController implements Initializable{
 				}
 			}
 	    });
+		//Drag and drop
+		tracklist.setOnDragOver(event -> {
+			Dragboard db = event.getDragboard();
+			if (db.hasContent(C.trackDataFormat)) {
+					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+					event.consume();
+			}
+		});
+
+		tracklist.setOnDragDropped(event -> {
+			Dragboard db = event.getDragboard();
+			if (db.hasContent(C.trackDataFormat)) {
+				Main.tracklist.addTracks((ArrayList<Integer>) db.getContent(C.trackDataFormat));
+				event.setDropCompleted(true);
+				event.consume();
+			}
+		});
 		//start: tracklist folded
 		foldTracklist();
 	}
@@ -57,17 +80,7 @@ public class TracklistController implements Initializable{
 	private void setLastSelected(){
 		Main.mainController.lastSelected = tracklist.getSelectionModel().getSelectedItem();
 	}
-	
-	public void updateTracklist(){
-		//force update tracklistview
-		System.out.println("updatetl");
-//		tracklist.setItems(null);
-//		tracklist.setItems(Main.tracklist.getList());
-    	//Scroll to current track
-    	tracklist.scrollTo(Main.mediaplayer.getStatus().getCurrTrack());
-    	//update tracksTable
-    	Main.databaseController.updateTable();
-	}
+
 	@FXML
 	private void foldTracklist(){
 		if(arrow.getGraphic().getRotate()==180){ //open->fold it
@@ -78,7 +91,6 @@ public class TracklistController implements Initializable{
 			tracklistRoot.getChildren().add(tracklist);
 			foldContainer.getChildren().add(0,horizLabel);
 			arrow.getGraphic().setRotate(180);
-			updateTracklist();
 		}
 	}
 

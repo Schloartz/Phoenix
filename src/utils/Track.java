@@ -1,12 +1,11 @@
 package utils;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
-
+import application.service.Main;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.Labeled;
+import javafx.util.Callback;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -19,9 +18,13 @@ import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
 
-import application.service.Main;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Objects;
 
-public class Track extends MP3File{ //represents a physical mp3 file with tags and properties of current player
+public class Track extends MP3File implements Serializable { //represents a physical mp3 file with tags and properties of current player
 
 	private int id = -1; //id in database (also shows if track is listed in database (!=-1)
 	private MP3File mp3; //representation of mp3
@@ -29,7 +32,7 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 	private int trackNr, year, rating;
 	private double bpm;
 	private BufferedImage cover;
-	private boolean active = false; //if track is currently being played/paused
+	private BooleanProperty active = new SimpleBooleanProperty(false); //if track is currently being played/paused
 	
 	public Track(String _path){ //initializes track with a path, rest is read-in from file system
 		try {
@@ -69,6 +72,7 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 		///cover excluded due to performance issues
 		
 	}
+
 
 	private MP3File readMP3(){
 		try {
@@ -226,10 +230,12 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 		}
 	
 	}
-	public void setActive(boolean value) {
-		active = value;
-	}
-	boolean getActive(){ return active; }
+//	public void setActive(boolean value) {
+//		active = value;
+//	}
+//	boolean getActive(){ return active; }
+	public final void setActive(boolean value) { active.set(value); }
+	final boolean getActive(){ return active.get(); }
 	public String getPath() {
 		return path;
 	}
@@ -266,5 +272,9 @@ public class Track extends MP3File{ //represents a physical mp3 file with tags a
 	}
 	public int getId(){
 		return id;
+	}
+
+	public BooleanProperty activeProperty() {
+		return active;
 	}
 }

@@ -1,20 +1,13 @@
 package application.service;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utils.Track;
+
+import java.io.File;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 /*Examples of Queries:
  * s.executeUpdate("ALTER TABLE " + tableName + " ADD filename VARCHAR(100) ");
@@ -45,7 +38,6 @@ public class Database{
             con = DriverManager.getConnection("jdbc:derby:MusicDatabase;create=true");
             running = true;
             //Print last build date
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy HH:mm");
             System.out.println("Database has been started.");
         }catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException se){
         	se.printStackTrace();
@@ -65,9 +57,9 @@ public class Database{
 				//optional: delete old files from database
 				try {
 					Statement s = con.createStatement();
-					s.executeUpdate("DELETE FROM " + tableName + " WHERE path LIKE '" + f.getPath() + "%'");
+					s.executeUpdate("DELETE FROM " + tableName + " WHERE path LIKE '" + getSQLSafeVersion(f.getPath()) + "%'");
 				} catch (SQLException e2) {
-					e2.printStackTrace();
+					printSQLException(e2);
 				}
 
 				try { //prepare Statment
@@ -91,7 +83,7 @@ public class Database{
 
 
 	private ArrayList<File> findNewFolders(){ //returns all new folders in the database-folder
-		ArrayList<File> folders = new ArrayList<File>();
+		ArrayList<File> folders = new ArrayList<>();
 
 		for(File f:new File(physicalDb).listFiles()){
 			if(f.isDirectory() && f.lastModified()>Main.getUpdated()){ //folder is "unknown", bc last build did take place before his last modification
@@ -119,19 +111,46 @@ public class Database{
 				System.out.println("Deleted "+del+" old entries");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			printSQLException(e);
 		}
   	}
   	
+	private String getSQLSafeVersion(String str){ //returns a SQL safe version of a string (e.g. escaped '->'')
+		if(str.contains("'")){
+			str = str.replace("'", "''");
+		}
+		return str;
+	}
 
-  	
+	ArrayList<Track> getTracks(ArrayList<Integer> ids){
+		ArrayList<Track> tracks = new ArrayList<>();
+		ResultSet resultSet;
+
+		String query="";
+		for(int i:ids){
+			if(query.equals("")){
+				query = String.valueOf(i);
+			}else{
+				query = query +", "+i;
+			}
+		}
+		try {
+			Statement s = con.createStatement();
+			resultSet = s.executeQuery("SELECT * FROM "+tableName+" WHERE ID IN (" + query + ")");
+			while(resultSet.next()){
+				tracks.add(new Track(resultSet.getInt(1), resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getInt(7), resultSet.getInt(8), resultSet.getDouble(9),resultSet.getInt(10)));
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+
+		return tracks;
+	}
+
     public ObservableList<Track> search(String str_org){ //search the database for String <str> and return the results
     	results.clear();
 		//escape quotes (')
-		String str = str_org;
-		if(str.contains("'")){
-			str = str_org.replace("'", "''");
-		}
+		String str = getSQLSafeVersion(str_org);
 		str = str.toLowerCase();
 
     	try{
@@ -166,7 +185,7 @@ public class Database{
     		s.close();
     		System.out.println("Search finished: \""+str_org+"\", "+(System.currentTimeMillis()-dur)+" ms, "+results.size()+" results");
     	}catch (SQLException se){
-        	se.printStackTrace();
+			printSQLException(se);
         }
     	return results;
     }
@@ -213,70 +232,68 @@ public class Database{
 
 
 	public void rebuild() { //rebuilds the database from scratch
-		Thread rebuild = new Thread(){
-			public void run(){
-				System.out.println("Starting to rebuild Database");
-				long startingTime = System.currentTimeMillis();
-				//Drop table from database
-				try{
-		    		Statement s = con.createStatement();
-		    		s.executeUpdate("DROP TABLE "+tableName); 
-		    		s.close();
-		    	}catch(SQLException se){
-		    		printSQLException(se);
-		    	}
-				//create table and columns
-				try{
-		    		Statement s = con.createStatement();
-		    		s.close();
-				}catch(SQLException se){
-		    		printSQLException(se);
-		    	}
-				try{
-		    		Statement s = con.createStatement();
-		    		s.execute("CREATE TABLE "+tableName + "("
-		    				+ "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-		    				+ "path varchar(500),"
-		    				+ "title varchar(500),"
-		    				+ "albumartist varchar(500),"
-		    				+ "artist varchar(500),"
-		    				+ "album varchar(500),"
-		    				+ "trackNr int,"
-		    				+ "yea int,"
-		    				+ "bpm double,"
-		    				+ "rating int)");
-		    		s.close();
-		    	}catch(SQLException se){
-		    		printSQLException(se);
-		    	}
-				//insert tracks
-				try { //prepare Statment
-					psInsert = con.prepareStatement("INSERT INTO "+tableName+"(path, title, albumartist, artist, album, trackNr, yea, bpm, rating) VALUES (?,?,?,?,?,?,?,?,?)");
-				} catch (SQLException e1) {
-					printSQLException(e1);
-				}
-				//count all folders in medialibrary
-				searchedFiles = 0;
-				countAllFiles(new File(physicalDb));
-				maxFiles = searchedFiles;
-				//iterate through folders and add to DB
-				searchedFiles = 0;
-				searchAllSubfolders(new File(physicalDb), true);
-				try {
-					psInsert.close();
-				} catch (SQLException e) {
-					printSQLException(e);
-				}
-				//save build time in preferences
-				long lastBuild = System.currentTimeMillis();
-				Main.setComplete(lastBuild);
-				System.out.println("Set last complete build to "+lastBuild);
-				
-				long duration = (System.currentTimeMillis() - startingTime)/1000; //duration in s
-				System.out.println("Finished rebuilding Database ("+searchedFiles+" Files in "+(duration-duration%60)/60+"m "+duration%60+"s)");
-				Main.settingsController.hideProgress();
-			}
-		};
+		Thread rebuild = new Thread(() -> {
+            System.out.println("Starting to rebuild Database");
+            long startingTime = System.currentTimeMillis();
+            //Drop table from database
+            try{
+                Statement s = con.createStatement();
+                s.executeUpdate("DROP TABLE "+tableName);
+                s.close();
+            }catch(SQLException se){
+                printSQLException(se);
+            }
+            //create table and columns
+            try{
+                Statement s = con.createStatement();
+                s.close();
+            }catch(SQLException se){
+                printSQLException(se);
+            }
+            try{
+                Statement s = con.createStatement();
+                s.execute("CREATE TABLE "+tableName + "("
+                        + "ID INT not null primary key GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                        + "path varchar(500),"
+                        + "title varchar(500),"
+                        + "albumartist varchar(500),"
+                        + "artist varchar(500),"
+                        + "album varchar(500),"
+                        + "trackNr int,"
+                        + "yea int,"
+                        + "bpm double,"
+                        + "rating int)");
+                s.close();
+            }catch(SQLException se){
+                printSQLException(se);
+            }
+            //insert tracks
+            try { //prepare Statment
+                psInsert = con.prepareStatement("INSERT INTO "+tableName+"(path, title, albumartist, artist, album, trackNr, yea, bpm, rating) VALUES (?,?,?,?,?,?,?,?,?)");
+            } catch (SQLException e1) {
+                printSQLException(e1);
+            }
+            //count all folders in medialibrary
+            searchedFiles = 0;
+            countAllFiles(new File(physicalDb));
+            maxFiles = searchedFiles;
+            //iterate through folders and add to DB
+            searchedFiles = 0;
+            searchAllSubfolders(new File(physicalDb), true);
+            try {
+                psInsert.close();
+            } catch (SQLException e) {
+                printSQLException(e);
+            }
+            //save build time in preferences
+            long lastBuild = System.currentTimeMillis();
+            Main.setComplete(lastBuild);
+            System.out.println("Set last complete build to "+lastBuild);
+
+            long duration = (System.currentTimeMillis() - startingTime)/1000; //duration in s
+            System.out.println("Finished rebuilding Database ("+searchedFiles+" Files in "+(duration-duration%60)/60+"m "+duration%60+"s)");
+            Main.settingsController.hideProgress();
+        });
 		rebuild.start();
 	}
 	private void countAllFiles(File f){ //checks through all mp3-files in the folder and counts them
@@ -356,7 +373,7 @@ public class Database{
     		}
     		
     		//count rows
-    		int size= 0;
+    		int size;
     		if (rs != null){  
     		  rs.beforeFirst();
     		  rs.last();
@@ -383,9 +400,5 @@ public class Database{
 
 	boolean isRunning() {
 		return running;
-	}
-	
-	public ObservableList<Track> getResults(){
-		return results;
 	}
 }

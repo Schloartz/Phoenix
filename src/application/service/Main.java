@@ -1,22 +1,9 @@
 package application.service;
 	
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.prefs.Preferences;
-
+import application.controllers.*;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.IntellitypeListener;
 import com.melloware.jintellitype.JIntellitype;
-
-import application.controllers.ControlsController;
-import application.controllers.CoverviewController;
-import application.controllers.DatabaseController;
-import application.controllers.MenuController;
-import application.controllers.SettingsController;
-import application.controllers.TracklistController;
-import application.controllers.MainController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,9 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -34,6 +19,12 @@ import javafx.stage.StageStyle;
 import utils.C;
 import utils.Flash;
 import utils.TrackInfo;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 
 public class Main extends Application implements IntellitypeListener, HotkeyListener{
@@ -43,7 +34,6 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static ContextMenu contextMenu;
 	static TrackInfo trackInfo;
 	private static Preferences prefs = Preferences.userRoot().node(Main.class.getName()); //includes all user settings for database
-	private static HotkeyListener hotkeyListener;
 	//PlayerController & Database
 	public static Mediaplayer mediaplayer;
 	public static Database database;
@@ -72,7 +62,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	
 	@Override
 	public void start(Stage primaryStage) {
-		hotkeyListener = this;
+		HotkeyListener hotkeyListener = this;
 		setStage(primaryStage);
 		root = null;
 		//Load FXML
@@ -92,11 +82,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		JIntellitype.getInstance();
 		JIntellitype.getInstance().addIntellitypeListener(this); //intellitype for playpause mediabutton
 		JIntellitype.getInstance().addHotKeyListener(hotkeyListener); //hotkeylistener for num inputs
-		JIntellitype.getInstance().registerHotKey(C.KEY_BACKWARD, 0, C.KEY_NUM4); //0: no key associated
-		JIntellitype.getInstance().registerHotKey(C.KEY_PLAYPAUSE, 0, C.KEY_NUM5);
-		JIntellitype.getInstance().registerHotKey(C.KEY_FORWARD, 0, C.KEY_NUM6);
-		JIntellitype.getInstance().registerHotKey(C.KEY_AUTODJ, 0, C.KEY_NUM8);
-		JIntellitype.getInstance().registerHotKey(C.KEY_SHUFFLE, 0, C.KEY_NUM2);
+		toggleNumInput(true);
 		//init ContextMenu
 		initContextMenu();
 		trackInfo = new TrackInfo(); 
@@ -124,10 +110,10 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 				}
 			}
 		});
-		MenuItem updateFolder = new MenuItem("Update song");
+		MenuItem updateFolder = new MenuItem("Update folder");
 		updateFolder.setOnAction(event -> { //updates tags for song
 			ArrayList<File> file = new ArrayList<>();
-			file.add(new File(mainController.lastSelected.getPath()));
+			file.add(new File(mainController.lastSelected.getPath()).getParentFile());
 			database.updateEntries(file);
 		});
 		contextMenu.getItems().addAll(updateFolder, openFolder);
@@ -202,9 +188,19 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 
 	public static void toggleNumInput(boolean bool){ //enables/disables input via numpad
 		if(bool){
-			JIntellitype.getInstance().addHotKeyListener(hotkeyListener);
+			//JIntellitype.getInstance().addHotKeyListener(hotkeyListener);
+			JIntellitype.getInstance().registerHotKey(C.KEY_BACKWARD, 0, C.KEY_NUM4); //0: no key associated
+			JIntellitype.getInstance().registerHotKey(C.KEY_PLAYPAUSE, 0, C.KEY_NUM5);
+			JIntellitype.getInstance().registerHotKey(C.KEY_FORWARD, 0, C.KEY_NUM6);
+			JIntellitype.getInstance().registerHotKey(C.KEY_AUTODJ, 0, C.KEY_NUM8);
+			JIntellitype.getInstance().registerHotKey(C.KEY_SHUFFLE, 0, C.KEY_NUM2);
 		}else{
-			JIntellitype.getInstance().removeHotKeyListener(hotkeyListener);
+			//JIntellitype.getInstance().removeHotKeyListener(hotkeyListener);
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_BACKWARD); //0: no key associated
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_PLAYPAUSE);
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_FORWARD);
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_AUTODJ);
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_SHUFFLE);
 		}
 	}
 	public static BorderPane getRoot(){ return root;}

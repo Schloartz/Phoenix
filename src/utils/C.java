@@ -1,5 +1,7 @@
 package utils;
 
+import javafx.scene.input.DataFormat;
+
 public final class C { //CONSTANT VARIABLES: contains all final variables
 	//Display
 	public static double SCREEN_WIDTH = 1920;
@@ -33,5 +35,6 @@ public final class C { //CONSTANT VARIABLES: contains all final variables
 	public static final int KEY_NUM8 = 104;
 	public static final int KEY_NUM2 = 98;
 	
-	
+	//Clipboard functionality
+	public static final DataFormat trackDataFormat = new DataFormat("com.application.utils.Track");
 }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utils.Track;
@@ -14,7 +15,8 @@ public class Tracklist {
 	private ObservableList<Track> list;
 	
 	Tracklist(){
-		list = FXCollections.observableArrayList();
+		//ObservableList with extractor that fires an onChange-event when ActiveProperty is changed
+		list = FXCollections.observableArrayList(track -> new Observable[]{track.activeProperty()});
 	}
 	
 	public boolean isInTracklist(Track t){ //returns if a track is in the current tracklist
@@ -70,15 +72,17 @@ public class Tracklist {
 				Main.mediaplayer.getStatus().setCurrTrack(c_org-deleted); //case 2
 			}
 		}
-		
-		Main.tracklistController.updateTracklist();
+
 		Main.coverviewController.updateCoverView(false, "nothing");
 	}
-	
+
+	public void addTracks(ArrayList<Integer> ids){
+		list.addAll(Main.database.getTracks(ids));
+	}
+
 	public void addTrack(Track track) {
 		if(new File(track.getPath()).exists()){
 			list.add(track);
-			Main.tracklistController.updateTracklist();
 			Main.coverviewController.updateCoverView(false, "nothing");
 		}else{
 			System.out.println("ERROR track ("+track.getPath()+") not existing");
@@ -93,7 +97,6 @@ public class Tracklist {
 				System.out.println("ERROR track ("+t.getPath()+") not existing");
 			}
 		}
-		Main.tracklistController.updateTracklist();
 		Main.coverviewController.updateCoverView(false, "nothing");
 	}
 	

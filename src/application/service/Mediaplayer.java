@@ -105,7 +105,6 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			//GUI
 			Main.controlsController.showOrgRating();
 			Main.coverviewController.updateCoverView(true, "backward");
-			Main.tracklistController.updateTracklist();
 			//Show trackInfo
 			if(Main.mainController.showTrackInfo){
 				Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
@@ -152,7 +151,6 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				//GUI
 				Main.controlsController.showOrgRating();
 				Main.coverviewController.updateCoverView(true, "forward");
-				Main.tracklistController.updateTracklist();
 				//Show trackInfo
 				if(Main.mainController.showTrackInfo){
 					Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
@@ -215,7 +213,6 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 	public boolean shufflePressed() { //shuffles upcoming songs, returns true if valid input
 		if(Main.tracklist.isSubsequentTrack(1)){
 			Main.tracklist.shuffle();
-			Main.tracklistController.updateTracklist();
 			Main.coverviewController.updateCoverView(false, "nothing");
 			return true;
 		}else{
