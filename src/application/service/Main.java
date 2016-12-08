@@ -165,7 +165,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 					break;
 					case C.KEY_TRACKINFO:
 						//Show trackInfo if track is present
-						if(mediaplayer.isPlaying()){
+						if(mediaplayer.trackLoaded()){
 							trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
 							trackInfo.show(stage);
 						}else{

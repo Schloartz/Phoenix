@@ -18,7 +18,7 @@ public class RatingObjects extends HBox{
 	public RatingObjects(){
 		//create objects
 		for(int i=1;i<=5;i++){
-			Star star = new Star();
+			Star star = new Star(15,6);
 			star.setStrokeWidth(2);
 			star.setStroke(Color.BLACK);
 			star.setFill(Color.WHITE);

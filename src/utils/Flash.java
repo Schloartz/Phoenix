@@ -3,22 +3,17 @@ package utils;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Popup;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 public class Flash extends Popup { //short flash to show change of settings
-	private double sec = 0.5;
+	private static final double SEC = 0.5;
 	
 	public Flash(Image i) {
 		//Position
@@ -33,7 +28,7 @@ public class Flash extends Popup { //short flash to show change of settings
 
 		//Timeline
 		Timeline timeline = new Timeline();
-		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(sec), e -> hide()));
+		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(SEC), e -> hide()));
 		addEventHandler(WindowEvent.WINDOW_SHOWN, e -> timeline.play());
 	}
 	

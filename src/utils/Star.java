@@ -6,10 +6,11 @@ import java.util.ArrayList;
 //thanks to StanislavL from which I adapted this solution http://java-sl.com/shapes.html
 
 class Star extends Polygon {
-    Star() {
-        this(0, 0, 15, 6, 5, 3*Math.PI/10);
+    Star(double r, double innerR) { //innerR ~ 0.4*r
+        this(0, 0, r, innerR, 5, 3*Math.PI/10);
     }
-    private Star(int x, int y, int r, int innerR, int vertexCount, double startAngle) {
+
+    private Star(int x, int y, double r, double innerR, int vertexCount, double startAngle) {
         int[] xi = getXCoordinates(x, y, r, innerR,  vertexCount, startAngle);
         int[] yi = getYCoordinates(x, y, r, innerR,  vertexCount, startAngle);
         ArrayList<Double> points = new ArrayList<>();
@@ -20,7 +21,7 @@ class Star extends Polygon {
         getPoints().addAll(points);
     }
 
-    private static int[] getXCoordinates(int x, int y, int r, int innerR, int vertexCount, double startAngle) {
+    private static int[] getXCoordinates(int x, int y, double r, double innerR, int vertexCount, double startAngle) {
         int res[]=new int[vertexCount*2];
         double addAngle=2*Math.PI/vertexCount;
         double angle=startAngle;
@@ -34,7 +35,7 @@ class Star extends Polygon {
         return res;
     }
 
-    private static int[] getYCoordinates(int x, int y, int r, int innerR, int vertexCount, double startAngle) {
+    private static int[] getYCoordinates(int x, int y, double r, double innerR, int vertexCount, double startAngle) {
         int res[]=new int[vertexCount*2];
         double addAngle=2*Math.PI/vertexCount;
         double angle=startAngle;

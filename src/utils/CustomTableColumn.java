@@ -8,15 +8,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 public class CustomTableColumn<S, T> implements Callback<TableColumn<S, T>, TableCell<S, T>> {
 	
-	private Image star_full, star_empty;
-	
     public CustomTableColumn() {
-    	star_full = new Image(getClass().getResourceAsStream("/resources/icons/ratingstar_full.png"));
-		star_empty = new Image(getClass().getResourceAsStream("/resources/icons/ratingstar_empty.png"));
+
     }
 
 	@Override
@@ -58,19 +56,19 @@ public class CustomTableColumn<S, T> implements Callback<TableColumn<S, T>, Tabl
         };
 	    }
 	
-		private HBox getRatingstars(int stars){ //return an HBox containing 5 images corresponding to the rating of the song, e.g. 3 = XXX00
+		private HBox getRatingstars(int rating){ //return an HBox containing 5 images corresponding to the rating of the song, e.g. 3 = XXX00
 			HBox hb = new HBox();
-			
-			for(int i=0;i<stars;i++){
-				hb.getChildren().add(new ImageView(star_full));
-			}
-			for(int l=stars;l<5;l++){
-				hb.getChildren().add(new ImageView(star_empty));
-			}
-			for(Node i:hb.getChildren()){
-				((ImageView) i).setFitHeight(15);
-				((ImageView) i).setFitWidth(15);
-			}
+            for(int i=1;i<=5;i++){
+                Star star = new Star(8,3.6);
+                star.setStrokeWidth(0.5);
+                star.setStroke(Color.BLACK);
+                if(i<rating){
+                    star.setFill(Color.BLACK);
+                }else{
+                    star.setFill(Color.TRANSPARENT);
+                }
+                hb.getChildren().add(star);
+            }
 			return hb;
 		}
 	}
