@@ -19,7 +19,7 @@ public class SettingsController implements Initializable{
 	@FXML
 	private VBox SettingsView; 
 	@FXML
-	private CheckBox trackinfo, controlinfo, numinput;
+	private CheckBox controlinfo, numinput;
 	@FXML
 	private StackPane menuProgressContainer;
 	@FXML
@@ -33,7 +33,6 @@ public class SettingsController implements Initializable{
 		Main.settingsController = this;
 		updateUpdate();
 		updateComplete();
-		trackinfo.selectedProperty().addListener((ov, old_val, new_val) -> Main.mainController.showTrackInfo = new_val);
 		controlinfo.selectedProperty().addListener((ov, old_val, new_val) -> Main.mainController.showFlash = new_val);
 		numinput.selectedProperty().addListener((ov, old_val, new_val) -> Main.toggleNumInput(new_val));
 	}

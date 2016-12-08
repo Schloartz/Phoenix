@@ -23,17 +23,21 @@ public final class C { //CONSTANT VARIABLES: contains all final variables
 	
 	//Hotkey support for jintellitype (Numpad)
 	///Internal KeyCodes (arbitrary): correspond to numpad keys
+	public static final int KEY_SHUFFLE = 2;
 	public static final int KEY_BACKWARD = 4;
 	public static final int KEY_PLAYPAUSE = 5;
 	public static final int KEY_FORWARD = 6;
 	public static final int KEY_AUTODJ = 8;
-	public static final int KEY_SHUFFLE = 2;
+	public static final int KEY_TRACKINFO = 9;
+
 	///KeyCodes from System (fixed)
+	public static final int KEY_NUM2 = 98;
 	public static final int KEY_NUM4 = 100;
 	public static final int KEY_NUM5 = 101;
 	public static final int KEY_NUM6 = 102;
 	public static final int KEY_NUM8 = 104;
-	public static final int KEY_NUM2 = 98;
+	public static final int KEY_NUM9 = 105;
+
 	
 	//Clipboard functionality
 	public static final DataFormat trackDataFormat = new DataFormat("com.application.utils.Track");

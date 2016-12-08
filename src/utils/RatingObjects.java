@@ -6,28 +6,29 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 
 import java.util.ArrayList;
 
 
 public class RatingObjects extends HBox{
-	private ArrayList<Circle> ratingobjects = new ArrayList<>();
+	private ArrayList<Star> ratingobjects = new ArrayList<>();
 
 	
 	public RatingObjects(){
 		//create objects
 		for(int i=1;i<=5;i++){
-			Circle outer = new Circle(12);
-			outer.setStrokeWidth(3);
-			outer.setStroke(Color.BLACK);
-			outer.setFill(Color.WHITE);
-			ratingobjects.add(outer);
-			setEventHandling(outer, i);
-			this.getChildren().add(outer);
+			Star star = new Star();
+			star.setStrokeWidth(2);
+			star.setStroke(Color.BLACK);
+			star.setFill(Color.WHITE);
+			ratingobjects.add(star);
+			setEventHandling(star, i);
+			this.getChildren().add(star);
 		}
 	}
 
-	private void setEventHandling(Circle c, int pos){ //sets the EventHandling for the single objects
+	private void setEventHandling(Star c, int pos){ //sets the EventHandling for the single objects
 		c.addEventHandler(MouseEvent.MOUSE_MOVED, e -> {
 			//fill all stars till this one
 			showStarRating(pos, "mouseover");
@@ -60,7 +61,7 @@ public class RatingObjects extends HBox{
 			col = Color.web("#C4C4C4");
         }
         int i = 0;
-        for(Circle c:ratingobjects){ //filled circles
+        for(Star c:ratingobjects){ //filled circles
 			if(i<rating){
 				c.setFill(col);
 			}else{

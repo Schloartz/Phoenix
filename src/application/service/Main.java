@@ -141,6 +141,11 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	        @Override
 	        public void run() {
 	        	switch(key){
+				case C.KEY_SHUFFLE:
+					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
+						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show();
+					}
+					break;
 				case C.KEY_BACKWARD: mediaplayer.backwardPressed();
 					break;
 				case C.KEY_PLAYPAUSE: mediaplayer.playPausePressed();
@@ -153,11 +158,11 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 					}
 					Platform.runLater(() -> controlsController.autodjPressed());
 					break;
-				case C.KEY_SHUFFLE:
-					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
-						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show();
-					}
-					break;
+					case C.KEY_TRACKINFO:
+						//Show trackInfo
+						Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
+						Main.trackInfo.show();
+						break;
 				}
 	        }
 	   });
@@ -189,18 +194,20 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static void toggleNumInput(boolean bool){ //enables/disables input via numpad
 		if(bool){
 			//JIntellitype.getInstance().addHotKeyListener(hotkeyListener);
+			JIntellitype.getInstance().registerHotKey(C.KEY_SHUFFLE, 0, C.KEY_NUM2);
 			JIntellitype.getInstance().registerHotKey(C.KEY_BACKWARD, 0, C.KEY_NUM4); //0: no key associated
 			JIntellitype.getInstance().registerHotKey(C.KEY_PLAYPAUSE, 0, C.KEY_NUM5);
 			JIntellitype.getInstance().registerHotKey(C.KEY_FORWARD, 0, C.KEY_NUM6);
 			JIntellitype.getInstance().registerHotKey(C.KEY_AUTODJ, 0, C.KEY_NUM8);
-			JIntellitype.getInstance().registerHotKey(C.KEY_SHUFFLE, 0, C.KEY_NUM2);
+			JIntellitype.getInstance().registerHotKey(C.KEY_TRACKINFO, 0, C.KEY_NUM9);
 		}else{
 			//JIntellitype.getInstance().removeHotKeyListener(hotkeyListener);
-			JIntellitype.getInstance().unregisterHotKey(C.KEY_BACKWARD); //0: no key associated
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_SHUFFLE);
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_BACKWARD);
 			JIntellitype.getInstance().unregisterHotKey(C.KEY_PLAYPAUSE);
 			JIntellitype.getInstance().unregisterHotKey(C.KEY_FORWARD);
 			JIntellitype.getInstance().unregisterHotKey(C.KEY_AUTODJ);
-			JIntellitype.getInstance().unregisterHotKey(C.KEY_SHUFFLE);
+			JIntellitype.getInstance().unregisterHotKey(C.KEY_TRACKINFO);
 		}
 	}
 	public static BorderPane getRoot(){ return root;}

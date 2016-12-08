@@ -1,11 +1,8 @@
 package utils;
 
 import application.service.Main;
-import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.control.Labeled;
-import javafx.util.Callback;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -21,10 +18,9 @@ import org.jaudiotagger.tag.images.Artwork;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Track extends MP3File implements Serializable { //represents a physical mp3 file with tags and properties of current player
+public class Track extends MP3File { //represents a physical mp3 file with tags and properties of current player
 
 	private int id = -1; //id in database (also shows if track is listed in database (!=-1)
 	private MP3File mp3; //representation of mp3

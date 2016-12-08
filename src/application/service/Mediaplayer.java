@@ -105,11 +105,6 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			//GUI
 			Main.controlsController.showOrgRating();
 			Main.coverviewController.updateCoverView(true, "backward");
-			//Show trackInfo
-			if(Main.mainController.showTrackInfo){
-				Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
-				Main.trackInfo.show();
-			}
 		}else{
 			System.out.println("ERROR with loading Media: " + Main.tracklist.getPath(status.getCurrTrack()+1));
 		}
@@ -151,11 +146,6 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				//GUI
 				Main.controlsController.showOrgRating();
 				Main.coverviewController.updateCoverView(true, "forward");
-				//Show trackInfo
-				if(Main.mainController.showTrackInfo){
-					Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
-					Main.trackInfo.show();
-				}
 			}else{
 				System.out.println("ERROR with loading Media: " + Main.tracklist.getPath(status.getCurrTrack()+1));
 			}

@@ -137,7 +137,7 @@
 }
 
 #ratingObjects{
-	-fx-spacing: 3px;
+	-fx-spacing: 0;
 	-fx-padding: 0 6px 0 6px;
 }
 

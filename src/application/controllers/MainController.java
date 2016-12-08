@@ -15,8 +15,7 @@ public class MainController implements Initializable{ //contains methods that ca
 	@FXML
 	private BorderPane root;
 	//Settings
-	public boolean showFlash = true;
-	public boolean showTrackInfo = true;
+	public boolean showFlash = false;
 	public Track lastSelected = null; //stores the last selected listcell/tableviewcell for open folder-contextmenu
 	String view = "musiccollection"; //current view: mediaplayer/musiccollection/settings
 	
