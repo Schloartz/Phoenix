@@ -66,4 +66,12 @@ public class SettingsController implements Initializable{
 	public void updateComplete(){ //updates the label for the last time the database was fully built
 		Platform.runLater(()-> complete.setText(DateFormat.getDateInstance().format(Main.getComplete())+" "+DateFormat.getTimeInstance().format(Main.getComplete())));
 	}
+
+	public void toggleNumInput() {
+		if(numinput.selectedProperty().get()) {
+			numinput.setSelected(false);
+		}else{
+			numinput.setSelected(true);
+		}
+	}
 }

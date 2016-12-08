@@ -29,6 +29,7 @@ public final class C { //CONSTANT VARIABLES: contains all final variables
 	public static final int KEY_FORWARD = 6;
 	public static final int KEY_AUTODJ = 8;
 	public static final int KEY_TRACKINFO = 9;
+	public static final int KEY_NUMTOGGLE = 0;
 
 	///KeyCodes from System (fixed)
 	public static final int KEY_NUM2 = 98;
@@ -37,6 +38,7 @@ public final class C { //CONSTANT VARIABLES: contains all final variables
 	public static final int KEY_NUM6 = 102;
 	public static final int KEY_NUM8 = 104;
 	public static final int KEY_NUM9 = 105;
+	public static final int KEY_NUMLOCK = 144;
 
 	
 	//Clipboard functionality

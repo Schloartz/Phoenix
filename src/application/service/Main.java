@@ -143,6 +143,9 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	        @Override
 	        public void run() {
 	        	switch(key){
+	        	case C.KEY_NUMTOGGLE:
+	        		Main.settingsController.toggleNumInput();
+					break;
 				case C.KEY_SHUFFLE:
 					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
 						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show(stage);
@@ -200,6 +203,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static void toggleNumInput(boolean bool){ //enables/disables input via numpad
 		if(bool){
 			//JIntellitype.getInstance().addHotKeyListener(hotkeyListener);
+			JIntellitype.getInstance().registerHotKey(C.KEY_NUMTOGGLE, 0, C.KEY_NUMLOCK);
 			JIntellitype.getInstance().registerHotKey(C.KEY_SHUFFLE, 0, C.KEY_NUM2);
 			JIntellitype.getInstance().registerHotKey(C.KEY_BACKWARD, 0, C.KEY_NUM4); //0: no key associated
 			JIntellitype.getInstance().registerHotKey(C.KEY_PLAYPAUSE, 0, C.KEY_NUM5);
