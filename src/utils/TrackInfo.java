@@ -12,13 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
+import javafx.stage.*;
 import javafx.util.Duration;
 
-public class TrackInfo extends Stage{
+public class TrackInfo extends Popup {
 	private ImageView coverview;
 	private Label trackInfoText;
 	private Timeline trackInfoTimeline;
@@ -31,12 +28,10 @@ public class TrackInfo extends Stage{
 	
 	
 	public TrackInfo(){ //initializes the components of the trackinfo-flash
-		
-		setAlwaysOnTop(true);
+		//Position
 		setX(C.SCREEN_WIDTH-220-15);
 		setY(15);
-		initStyle(StageStyle.TRANSPARENT);
-		initModality(Modality.NONE);
+
 		addEventHandler(WindowEvent.WINDOW_SHOWN, e -> trackInfoTimeline.play());
 		
 		HBox trackInfoContainer = new HBox(10);
@@ -75,7 +70,8 @@ public class TrackInfo extends Stage{
 		rightSide.getChildren().addAll(trackInfoText,rating);
 		
 		trackInfoContainer.getChildren().addAll(coverview, rightSide);
-		setScene(new Scene(trackInfoContainer,220,110));
+		trackInfoContainer.setMaxSize(220,110);
+		getContent().add(trackInfoContainer);
 		
 		//Timeline to hide trackInfo
 		trackInfoTimeline = new Timeline();

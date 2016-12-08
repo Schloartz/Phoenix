@@ -14,6 +14,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utils.C;
@@ -32,7 +34,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	@FXML
 	private static BorderPane root;
 	public static ContextMenu contextMenu;
-	static TrackInfo trackInfo;
+	private static TrackInfo trackInfo;
 	private static Preferences prefs = Preferences.userRoot().node(Main.class.getName()); //includes all user settings for database
 	//PlayerController & Database
 	public static Mediaplayer mediaplayer;
@@ -143,7 +145,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	        	switch(key){
 				case C.KEY_SHUFFLE:
 					if(mediaplayer.shufflePressed() && mainController.showFlash){ //if shuffle-input is valid and flash is enabled
-						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show();
+						new Flash(new Image(getClass().getResourceAsStream("/resources/icons/icon_shuffle.png"))).show(stage);
 					}
 					break;
 				case C.KEY_BACKWARD: mediaplayer.backwardPressed();
@@ -154,14 +156,18 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 					break;
 				case C.KEY_AUTODJ:
 					if(mainController.showFlash) {
-						new Flash(controlsController.returnNextAutodjIcon(mediaplayer.getStatus().getAutodj())).show();
+						new Flash(controlsController.returnNextAutodjIcon(mediaplayer.getStatus().getAutodj())).show(stage);
 					}
 					Platform.runLater(() -> controlsController.autodjPressed());
 					break;
 					case C.KEY_TRACKINFO:
-						//Show trackInfo
-						Main.trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
-						Main.trackInfo.show();
+						//Show trackInfo if track is present
+						if(mediaplayer.isPlaying()){
+							trackInfo.updateCoverTextRating(Main.tracklist.getCurrentTrack(), Main.coverviewController.getMidCoverImage());
+							trackInfo.show(stage);
+						}else{
+							System.out.println("ERROR cannot display trackinfo if no track is playing right now");
+						}
 						break;
 				}
 	        }

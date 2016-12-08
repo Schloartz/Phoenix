@@ -189,7 +189,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 
 	public boolean isPlaying() { //checks if PlayerController is currently playing
 		boolean answer = false;
-		if(players.size()!=0 && players.get(0).getStatus()!=null){ //PROBLEM ermges when player is not yet initialized far enough to display status
+		if(trackLoaded()){ //PROBLEM emerges when player is not yet initialized far enough to display status
 			if(players.get(0).getStatus().equals(MediaPlayer.Status.PAUSED) || players.get(0).getStatus().equals(MediaPlayer.Status.READY)){ //
 				answer = false;
 			}else if(players.get(0).getStatus().equals(MediaPlayer.Status.PLAYING)){
@@ -198,7 +198,10 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		}
 		return answer;
 	}
-
+	boolean trackLoaded(){ //returns true if a track is loaded right now
+		//PROBLEM emerges when player is not yet initialized far enough to display status
+		return players.size() != 0 && players.get(0).getStatus() != null;
+	}
 
 	public boolean shufflePressed() { //shuffles upcoming songs, returns true if valid input
 		if(Main.tracklist.isSubsequentTrack(1)){
