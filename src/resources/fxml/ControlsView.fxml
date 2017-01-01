@@ -6,8 +6,7 @@
 
 
 
-<VBox fx:id="controlsRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-	  fx:controller="application.controllers.ControlsController" stylesheets="/resources/css/StyleClasses.css">
+<VBox fx:id="controlsRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="application.controllers.ControlsController" stylesheets="/resources/css/StyleClasses.css">
  		<ProgressBar fx:id="trackProgress" prefWidth="800" progress="0"/>
  		<HBox fx:id="bottomControlsRoot" spacing="10">
 			<HBox spacing="5" alignment="CENTER_LEFT">

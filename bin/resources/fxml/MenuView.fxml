@@ -5,23 +5,21 @@
 <?import javafx.scene.image.*?>
 
 <HBox fx:id="menuRoot" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" stylesheets="/resources/css/StyleClasses.css" fx:controller="application.controllers.MenuController">
-    <ImageView>
-    	<image>
-        	<Image url="@/resources/icons/icon_phoenix.png"/>
-    	</image>
+	<ImageView>
+		<Image url="@/resources/icons/icon_phoenix.png"/>
 	</ImageView>
 	<fx:define>
 		<ToggleGroup fx:id="view"/>
 	</fx:define>
-	<ToggleButton fx:id="mediaplayer" text = "Mediaplayer" prefHeight="35" prefWidth="110" toggleGroup="$view" onAction="#switchToMediaplayer">
+	<ToggleButton fx:id="mediaplayer" text="Mediaplayer" prefHeight="35" prefWidth="110" toggleGroup="$view" onAction="#switchToMediaplayer">
 		<tooltip><Tooltip text="Hotkey: Alt"/></tooltip>
 	</ToggleButton>
 	<ToggleButton fx:id="musiccollection" selected="true" text="Musiccollection" prefHeight="35" prefWidth="120" toggleGroup="$view" onAction="#switchToMusiccollection">
 		<tooltip><Tooltip text="Hotkey: Alt"/></tooltip>
 	</ToggleButton>
-	<ToggleButton fx:id="settings" text = "Settings" prefHeight="35" prefWidth="80" toggleGroup="$view" onAction="#switchToSettings"/>
+	<ToggleButton fx:id="settings" text="Settings" prefHeight="35" prefWidth="80" toggleGroup="$view" onAction="#switchToSettings"/>
 	<Region HBox.hgrow="ALWAYS" onMousePressed="#dragStarted" onMouseDragged="#dragExecuted"/>
-	<ImageView fx:id="minimize" onMouseClicked="#minimize"/>
-	<ImageView fx:id="close" onMouseClicked="#shutdown"/>
+	<Button fx:id="minimize" onMouseClicked="#minimize"/>
+	<Button fx:id="close" onMouseClicked="#shutdown"/>
 </HBox>
 

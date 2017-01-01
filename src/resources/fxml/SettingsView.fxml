@@ -23,7 +23,7 @@
 	<Region prefHeight="12"/>
 	<VBox spacing="3">
 		<CheckBox fx:id="controlinfo" text="Show flash for change in autodj"/>
-		<CheckBox fx:id="numinput" selected="true" text="Enable hotkey input via numpad"/>
+		<CheckBox fx:id="numinput" selected="true" text="Enable hotkey input via numpad (PAUSE/BREAK)"/>
 	</VBox>
 	<Region prefHeight="12"/>
 	<VBox spacing="3">
@@ -36,7 +36,7 @@
 	<Region prefHeight="999"/>
 	<HBox>
 		<Region HBox.hgrow="SOMETIMES"/>
-		<Label text="Version: 0.25.5 // Date: 29.11.2016 // Author: Nash"/>
+		<Label text="Version: 0.25.6 // Date: 01.01.2017 // Author: Nash"/>
 		<Region HBox.hgrow="SOMETIMES"/>
 	</HBox>
 </VBox>

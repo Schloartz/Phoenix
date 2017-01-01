@@ -6,23 +6,29 @@ import com.melloware.jintellitype.IntellitypeListener;
 import com.melloware.jintellitype.JIntellitype;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.shape.Circle;
-import javafx.stage.Popup;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utils.C;
 import utils.Flash;
 import utils.TrackInfo;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +48,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static Tracklist tracklist;
 	//Controllers
 	public static MainController mainController;
+	public static SplashController splashController;
 	public static DatabaseController databaseController;
 	public static MenuController menuController;
 	public static CoverviewController coverviewController;
@@ -49,55 +56,102 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static ControlsController controlsController;
 	public static SettingsController settingsController;
 	
-	private static double starttime;
+	static double starttime;
 
 
 	public static void main(String[] args){
-		starttime = System.currentTimeMillis();
-		
-		mediaplayer = new Mediaplayer();
-		tracklist = new Tracklist();
-		database = new Database();
-		
 		launch(args);
 	}
-	
+
 	@Override
-	public void start(Stage primaryStage) {
-		HotkeyListener hotkeyListener = this;
-		setStage(primaryStage);
-		root = null;
-		//Load FXML
-		try {
-			root = FXMLLoader.load(getClass().getResource("/resources/fxml/MainWindowView.fxml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//Stage
-		Scene scene = new Scene(root,800,600);
-		scene.setOnKeyReleased(e -> {
-        	if(e.getCode()==KeyCode.ALT){
-        		menuController.toggleView();
-        	}
-        });
+	public void start(Stage stage) {
+		starttime = System.currentTimeMillis();
+
+		final Task init = new Task() {
+
+			@Override
+			protected Object call() throws Exception {
+				updateProgress(0.5,3.5);
+				updateMessage("Starting database...");
+				mediaplayer = new Mediaplayer();
+				tracklist = new Tracklist();
+				database = new Database();
+				updateProgress(2.5,3.5);
+				updateMessage("Loading GUI...");
+				Main.stage = stage;
+				root = null;
+				//Load FXML
+				try {
+					root = FXMLLoader.load(getClass().getResource("/resources/fxml/MainWindowView.fxml"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				C.printTime("Load Main root", starttime); //~500ms
+				updateProgress(3.0,3.5);
+				updateMessage("Showing GUI...");
+				//init ContextMenu
+				initContextMenu();
+				trackInfo = new TrackInfo();
+				return null;
+			}
+		};
+		stage.initStyle(StageStyle.TRANSPARENT);
+		//show splash screen
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icons/icon_phoenix_medium.png"))); //icon on taskbar
+		showSplash(stage,init);
+		C.printTime("Show Splash", starttime); //~500ms
+
 		//Global Hotkeys
+		HotkeyListener hotkeyListener = this;
 		JIntellitype.getInstance();
 		JIntellitype.getInstance().addIntellitypeListener(this); //intellitype for playpause mediabutton
 		JIntellitype.getInstance().addHotKeyListener(hotkeyListener); //hotkeylistener for num inputs
 		toggleNumInput(true);
-		//init ContextMenu
-		initContextMenu();
-		trackInfo = new TrackInfo(); 
-		//Stage
-		primaryStage.setScene(scene);
-		primaryStage.initStyle(StageStyle.TRANSPARENT);
-		primaryStage.setTitle("Phoenix");
-		primaryStage.centerOnScreen();
-		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/icons/icon_phoenix_large.png")));
-		primaryStage.show();
-		databaseController.getSearch().requestFocus();
-		System.out.println("Application has been started ("+((System.currentTimeMillis()-starttime)/1000)+" s)");
+	}
 
+
+
+	private void showSplash(Stage stage, Task<?> task) {
+		//Scene + Stage
+		StackPane r = null;
+		try {
+			r = FXMLLoader.load(getClass().getResource("/resources/fxml/SplashView.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Scene splashScene = new Scene(r, 185,343);
+		splashScene.setFill(Color.TRANSPARENT);
+		stage.setScene(splashScene);
+		//binding progressproperties
+		splashController.getSplashProgress().progressProperty().bind(task.progressProperty());
+		splashController.getSplashLabel().textProperty().bind(task.messageProperty());
+
+
+		task.stateProperty().addListener((observableValue, oldState, newState) -> {
+			if (newState == Worker.State.SUCCEEDED) {
+				splashController.getSplashProgress().progressProperty().unbind();
+				splashController.getSplashLabel().textProperty().unbind();
+				splashController.getSplashProgress().setProgress(1);
+				stage.hide();
+				//Stage
+				Scene scene = new Scene(root,800,600);
+				scene.setOnKeyReleased(e -> {
+					if(e.getCode()==KeyCode.ALT){
+						menuController.toggleView();
+					}
+				});
+				stage.setScene(scene);
+				stage.setTitle("Phoenix");
+				stage.show();
+				databaseController.getSearch().requestFocus();
+				C.printTime("Show Main", starttime); //~500ms
+				System.out.println("Application has been started ("+((System.currentTimeMillis()-starttime)/1000)+" s)");
+			}
+		});
+
+		stage.centerOnScreen();
+		stage.show();
+		new Thread(task).start();
 	}
 	
 	private void initContextMenu(){
@@ -179,9 +233,6 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 		
 	}
 
-	private static void setStage(Stage _stage) {
-		stage = _stage;
-	}
 
 	public static long getUpdated(){ //returns the time of the last incremental database update
 		return prefs.getLong("updated",0);
@@ -203,7 +254,7 @@ public class Main extends Application implements IntellitypeListener, HotkeyList
 	public static void toggleNumInput(boolean bool){ //enables/disables input via numpad
 		if(bool){
 			//JIntellitype.getInstance().addHotKeyListener(hotkeyListener);
-			JIntellitype.getInstance().registerHotKey(C.KEY_NUMTOGGLE, 0, C.KEY_NUMLOCK);
+			JIntellitype.getInstance().registerHotKey(C.KEY_NUMTOGGLE, 0, C.KEY_PAUSE);
 			JIntellitype.getInstance().registerHotKey(C.KEY_SHUFFLE, 0, C.KEY_NUM2);
 			JIntellitype.getInstance().registerHotKey(C.KEY_BACKWARD, 0, C.KEY_NUM4); //0: no key associated
 			JIntellitype.getInstance().registerHotKey(C.KEY_PLAYPAUSE, 0, C.KEY_NUM5);

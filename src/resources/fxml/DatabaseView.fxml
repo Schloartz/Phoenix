@@ -70,7 +70,7 @@
         			<PropertyValueFactory property="bpm" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="RATING" prefWidth="80">
+			<TableColumn text="RATING" prefWidth="100">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>
@@ -78,7 +78,7 @@
         			<PropertyValueFactory property="rating" />
       			</cellValueFactory>
 			</TableColumn>
-			<TableColumn text="PATH" prefWidth="145">
+			<TableColumn text="PATH" prefWidth="125">
 				<cellFactory>
 					<CustomTableColumn/>
 				</cellFactory>

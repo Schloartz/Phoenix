@@ -38,9 +38,17 @@ public final class C { //CONSTANT VARIABLES: contains all final variables
 	public static final int KEY_NUM6 = 102;
 	public static final int KEY_NUM8 = 104;
 	public static final int KEY_NUM9 = 105;
-	public static final int KEY_NUMLOCK = 144;
+	public static final int KEY_PAUSE = 19;
 
-	
 	//Clipboard functionality
 	public static final DataFormat trackDataFormat = new DataFormat("com.application.utils.Track");
+
+	//Time output
+	private static final boolean printTime = true;
+
+
+	public static void printTime(String par, double start){ //prints the time with a parameter
+		if(printTime)
+			System.out.println(par + ": "+(System.currentTimeMillis()-start));
+	}
 }

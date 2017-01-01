@@ -39,7 +39,6 @@
 	-fx-border-width: 0;
 	-fx-border-color: background-color;
 	-fx-font-weight: bold;
-
 }
 
 .button:hover{
@@ -67,7 +66,7 @@
 }
 
 .toggle-button:pressed{
-	-fx-background-color: highlight-color2;
+	-fx-background-color: highlight-color3;
 }
 
 .slider .thumb{
@@ -117,6 +116,34 @@
 	-fx-accent: highlight-color3;
 }
 
+#splashRoot{
+	-fx-background-color: transparent;
+	-fx-border-width: 0;
+}
+
+#splashContainer{
+	-fx-translate-x: 40;
+	-fx-translate-y: 280;
+}
+#splashLabel{
+	-fx-font-size: 11;
+}
+
+#splashProgress{
+	-fx-accent: black;
+	-fx-border-width: 0;
+	-fx-border-radius: 3px;
+}
+
+#splashProgress > .bar {
+	-fx-background-insets: 0;
+	-fx-padding: 0.2em;
+}
+
+#splashProgress > .track{
+	-fx-background-color: highlight-color1;
+}
+
 #backward{
 	-fx-graphic: url(/resources/icons/icon_forward.png);
 	-fx-rotate: 180;
@@ -151,24 +178,15 @@
 }
 
 #close{
-	-fx-image: url(/resources/icons/icon_close.png);
-}
-#close:hover{
-	-fx-image: url(/resources/icons/icon_close_mouseover.png);
-}
-#close:pressed{
-	-fx-image: url(/resources/icons/icon_close_activated.png);
-}
-#minimize{
-	-fx-image: url(/resources/icons/icon_minimize.png);
+	-fx-graphic: url(/resources/icons/icon_close.png);
+	-fx-max-height: 999;
 }
 
-#minimize:hover{
-	-fx-image: url(/resources/icons/icon_minimize_mouseover.png);
+#minimize{
+	-fx-graphic: url(/resources/icons/icon_minimize.png);
+	-fx-max-height: 999;
 }
-#minimize:pressed{
-	-fx-image: url(/resources/icons/icon_minimize_activated.png);
-}
+
 #search_close{
 	-fx-image: url(/resources/icons/icon_search_close.png);
 }

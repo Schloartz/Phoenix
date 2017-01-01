@@ -2,6 +2,7 @@ package application.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import utils.C;
 import utils.Track;
 
 import java.io.File;
@@ -37,18 +38,19 @@ public class Database{
             //Get a connection
             con = DriverManager.getConnection("jdbc:derby:MusicDatabase;create=true");
             running = true;
-            //Print last build date
-            System.out.println("Database has been started.");
         }catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException se){
         	se.printStackTrace();
 			return;
         }
+		C.printTime("Connection to database", Main.starttime); //~700ms
         if(new File(physicalDb).exists()){
             updateEntries(findNewFolders());
             deleteOldEntries();
+			C.printTime("Update Database",Main.starttime); //~2000ms
         }else{
             System.out.println("ERROR while trying to read your music files at <"+physicalDb+">. Is your hard drive connected?");
         }
+
   	}
 
   	void updateEntries(ArrayList<File> folders){ //updates entries in the database for the respecting folders
@@ -84,9 +86,11 @@ public class Database{
 
 	private ArrayList<File> findNewFolders(){ //returns all new folders in the database-folder
 		ArrayList<File> folders = new ArrayList<>();
+		long update = Main.getUpdated();
+		long complete = Main.getComplete();
 
 		for(File f:new File(physicalDb).listFiles()){
-			if(f.isDirectory() && f.lastModified()>Main.getUpdated()){ //folder is "unknown", bc last build did take place before his last modification
+			if(f.isDirectory() && f.lastModified()>update && f.lastModified()>complete){ //folder is "unknown", bc last build and update did take place before his last modification
 				folders.add(f);
 			}
 		}
@@ -98,6 +102,7 @@ public class Database{
 		try {	
 			Statement s = con.createStatement();
 			ResultSet res = s.executeQuery("SELECT ID, path FROM "+tableName);
+			C.printTime("Query all", Main.starttime);
 			String str ="(";
 			while(res.next()){
 	  			if(!new File(res.getString(2)).exists()){
@@ -105,6 +110,7 @@ public class Database{
 	  				del++;
 	  			}
 	  		}
+			C.printTime("Check for existence", Main.starttime);
 			if(!str.equals("(")){ //not empty
 				str = str.substring(0,str.length()-2) + ")";
 				s.executeUpdate("DELETE FROM "+tableName+" WHERE ID IN "+str);

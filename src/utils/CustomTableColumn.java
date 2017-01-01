@@ -60,9 +60,10 @@ public class CustomTableColumn<S, T> implements Callback<TableColumn<S, T>, Tabl
 			HBox hb = new HBox();
             for(int i=1;i<=5;i++){
                 Star star = new Star(8,3.6);
+
                 star.setStrokeWidth(0.5);
                 star.setStroke(Color.BLACK);
-                if(i<rating){
+                if(i<=rating){
                     star.setFill(Color.BLACK);
                 }else{
                     star.setFill(Color.TRANSPARENT);
