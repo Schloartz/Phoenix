@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import com.nash.phoenix.utils.CustomTableColumn?>
+
+<VBox fx:id="DatabaseView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="com.nash.phoenix.views.database.DatabasePresenter">
+	<StackPane>
+		<TextField fx:id="search" promptText="search" onKeyReleased="#searchPressed"/>
+		<ImageView fx:id="search_close" visible="false" StackPane.alignment="CENTER_RIGHT" translateX="-5" onMouseClicked="#deleteSearch"/>
+	</StackPane>
+	
+	<TableView fx:id="tracks" VBox.vgrow="ALWAYS" onMouseClicked="#tracksPressed" onKeyReleased="#tracksEnter">
+		<columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+		<columns>
+			<TableColumn text="TITLE" prefWidth="160">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="title" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="ALBUMARTIST" prefWidth="100">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="albumartist" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="ARTIST" prefWidth="100">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="artist" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="ALBUM" prefWidth="100">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="album" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="#" prefWidth="25">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="trackNr" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="YEAR" prefWidth="40">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="year" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="BPM" prefWidth="45">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="bpm" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="RATING" prefWidth="100">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="rating" />
+      			</cellValueFactory>
+			</TableColumn>
+			<TableColumn text="PATH" prefWidth="125">
+				<cellFactory>
+					<CustomTableColumn/>
+				</cellFactory>
+				<cellValueFactory>
+        			<PropertyValueFactory property="path" />
+      			</cellValueFactory>
+			</TableColumn>
+		</columns>
+	</TableView>
+</VBox>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox fx:id="SettingsView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="com.nash.phoenix.views.settings.SettingsPresenter" spacing="8" style="-fx-padding: 10">
+	<Label text="Musiccollection" style="-fx-font-weight: bold"/>
+	<GridPane hgap="3" vgap="3">
+		<Label text=" - Time of last update:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+		<Label fx:id="update" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+		<Label text=" - Time of last build:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+		<Label fx:id="complete" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+	</GridPane>
+
+	<HBox spacing="5">
+		<Button text="Rebuild Database" onAction="#rebuildDBPressed"/>
+		<StackPane fx:id="menuProgressContainer" opacity="0">
+			<ProgressBar fx:id="menuProgress" progress="0" prefHeight="25" prefWidth="200" StackPane.alignment="CENTER_LEFT"/>
+			<Label fx:id="menuInfo" text="Rebuilding..." StackPane.alignment="CENTER_LEFT" style="-fx-padding: 3"/>
+		</StackPane>
+	</HBox>
+	<Region prefHeight="12"/>
+	<VBox spacing="3">
+		<CheckBox fx:id="controlinfo" text="Show flash for change in autodj"/>
+		<CheckBox fx:id="numinput" selected="true" text="Enable hotkey input via numpad (PAUSE/BREAK)"/>
+	</VBox>
+	<Region prefHeight="12"/>
+	<VBox spacing="3">
+		<Label text="Shortcuts" style="-fx-font-weight: bold"/>
+		<Label text=" - Switching between Mediaplayer and Musiccollection: ALT"/>
+		<Label text=" - Playing/Pausing current song: Playpause-Mediabutton"/>
+		<Label text=" - Numpad controls:"/>
+		<ImageView><Image url="/icons/numpad_info.png"/></ImageView>
+	</VBox>
+	<Region prefHeight="999"/>
+	<HBox>
+		<Region HBox.hgrow="SOMETIMES"/>
+		<Label text="Version: 0.25.6 // Date: 01.01.2017 // Author: Nash"/>
+		<Region HBox.hgrow="SOMETIMES"/>
+	</HBox>
+</VBox>
+

@@ -48,14 +48,15 @@ Temporary Items
 
 # My Ignore Settings
 .idea/
-.settings/
 dll/
 GUI/
 MusicDatabase/
-out/
-src/resources/icons
+target/
+src/main/resources/
 
 derby.log
 TODO.txt
+Phoenix.iml
+
 
 

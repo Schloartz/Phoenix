@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+
+
+<!-- Layouting of the PhoenixApp -->
+
+<!-- ID warnings useless bc they are used in css -->
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.nash.phoenix.views.main.MainPresenter" stylesheets="/com/nash/phoenix/style.css"/>
