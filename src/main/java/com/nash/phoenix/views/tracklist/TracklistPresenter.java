@@ -32,26 +32,26 @@ public class TracklistPresenter implements Initializable{
 	@FXML
 	private HBox horizLabel;
 	@FXML
-	private ListView<Track> tracklist;
+	private ListView<Track> tracklistView;
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		App.tracklistPresenter = this;
 
-		tracklist.setItems(App.tracklist.getList());
-		tracklist.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-	    tracklist.setCellFactory(p -> new TracklistCell());
-	    tracklist.setOnKeyReleased(ke -> {
+		tracklistView.setItems(App.tracklist.getList());
+		tracklistView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+	    tracklistView.setCellFactory(p -> new TracklistCell());
+	    tracklistView.setOnKeyReleased(ke -> {
 			if(ke.getCode()==KeyCode.DELETE) {
-				ObservableList<Integer> i = tracklist.getSelectionModel().getSelectedIndices();
-				if (i.get(0) != -1) { //empty tracklist
+				ObservableList<Integer> i = tracklistView.getSelectionModel().getSelectedIndices();
+				if (i.get(0) != -1) { //empty tracklistView
 					App.tracklist.deleteTracks(i.get(0), i.get(i.size() - 1));
 				}
 			}
 	    });
 		//Drag and drop
-		tracklist.setOnDragOver(event -> {
+		tracklistView.setOnDragOver(event -> {
 			Dragboard db = event.getDragboard();
 			if (db.hasContent(C.trackDataFormat)) {
 					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -59,34 +59,44 @@ public class TracklistPresenter implements Initializable{
 			}
 		});
 
-		tracklist.setOnDragDropped(event -> {
+		tracklistView.setOnDragDropped(event -> {
 			Dragboard db = event.getDragboard();
 			if (db.hasContent(C.trackDataFormat)) {
-				App.tracklist.addTracks((ArrayList<Integer>) db.getContent(C.trackDataFormat));
+				App.tracklist.addTracksById((ArrayList<Integer>) db.getContent(C.trackDataFormat));
 				event.setDropCompleted(true);
 				event.consume();
 			}
 		});
-		//start: tracklist folded
+		//start: tracklistView folded
 		foldTracklist();
 	}
 	
 	@FXML
 	private void setLastSelected(){
-		App.mainPresenter.lastSelected = tracklist.getSelectionModel().getSelectedItem();
+		App.mainPresenter.lastSelected = tracklistView.getSelectionModel().getSelectedItem();
 	}
 
-	@FXML
-	private void foldTracklist(){
+	/**
+	 * open or folds the tracklistView depending on its current state
+	 */
+	public void foldTracklist(){
 		if(arrow.getGraphic().getRotate()==180){ //open->fold it
-			tracklistRoot.getChildren().remove(tracklist);
+			tracklistRoot.getChildren().remove(tracklistView);
 			foldContainer.getChildren().remove(horizLabel);
 			arrow.getGraphic().setRotate(0);
 		}else{ //closed->open it
-			tracklistRoot.getChildren().add(tracklist);
+			tracklistRoot.getChildren().add(tracklistView);
 			foldContainer.getChildren().add(0,horizLabel);
 			arrow.getGraphic().setRotate(180);
 		}
 	}
 
+
+	/**
+	 * Empties the tracklistView
+	 */
+	@FXML
+	private void emptyTracklist() {
+		App.tracklist.emptyTracklist();
+	}
 }

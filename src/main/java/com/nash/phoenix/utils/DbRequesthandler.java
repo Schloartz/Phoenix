@@ -65,7 +65,7 @@ public class DbRequesthandler { //handles search and similar requests to databas
         return results;
     }
 
-    public Track requestAutoDJTrack(Track t, int mode) { //returns a track that is similar to the current track in tracklist
+    public Track requestAutoDJTrack(Track t, int mode) { //returns a track that is similar to the current track in tracklistView
         long dur = System.currentTimeMillis();
         String currentIds = App.tracklist.getCurrentIds();
 

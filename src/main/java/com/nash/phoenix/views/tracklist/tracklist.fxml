@@ -16,6 +16,9 @@
             <Region HBox.hgrow="SOMETIMES"/>
             <Label text="Tracklist" style="-fx-font-weight: bold; -fx-font-size: 10pt;"/>
             <Region HBox.hgrow="SOMETIMES"/>
+            <Button onMouseClicked="#emptyTracklist">
+                <graphic><ImageView><Image url="/icons/icon_trash.png"/></ImageView></graphic>
+            </Button>
         </HBox>
         <Button fx:id="arrow" onMouseClicked="#foldTracklist">
             <graphic>
@@ -25,7 +28,7 @@
             </graphic>
         </Button>
     </StackPane>
-    <ListView fx:id="tracklist" onMouseClicked="#setLastSelected" prefHeight="800.0" prefWidth="200">
+    <ListView fx:id="tracklistView" onMouseClicked="#setLastSelected" prefHeight="800.0" prefWidth="200">
         <placeholder>
             <VBox fx:id="placeholderRoot" alignment="CENTER" spacing="5">
                 <padding>

@@ -14,10 +14,10 @@
 	</GridPane>
 
 	<HBox spacing="5">
-		<Button text="Rebuild Database" onAction="#rebuildDBPressed"/>
-		<StackPane fx:id="menuProgressContainer" opacity="0">
-			<ProgressBar fx:id="menuProgress" progress="0" prefHeight="25" prefWidth="200" StackPane.alignment="CENTER_LEFT"/>
-			<Label fx:id="menuInfo" text="Rebuilding..." StackPane.alignment="CENTER_LEFT" style="-fx-padding: 3"/>
+		<Button fx:id="rebuildButton" text="Rebuild Database" onAction="#rebuildDBPressed"/>
+		<StackPane fx:id="progressContainer" visible="false">
+			<ProgressBar fx:id="rebuildProgress" progress="0" prefHeight="25" prefWidth="200" StackPane.alignment="CENTER_LEFT"/>
+			<Label fx:id="rebuildInfo" text="Rebuilding..." StackPane.alignment="CENTER_LEFT" style="-fx-padding: 3"/>
 		</StackPane>
 	</HBox>
 	<Region prefHeight="12"/>
@@ -29,6 +29,7 @@
 	<VBox spacing="3">
 		<Label text="Shortcuts" style="-fx-font-weight: bold"/>
 		<Label text=" - Switching between Mediaplayer and Musiccollection: ALT"/>
+		<Label text=" - (Un-)folding of the tracklistView: CTRL"/>
 		<Label text=" - Playing/Pausing current song: Playpause-Mediabutton"/>
 		<Label text=" - Numpad controls:"/>
 		<ImageView><Image url="/icons/numpad_info.png"/></ImageView>
@@ -36,7 +37,7 @@
 	<Region prefHeight="999"/>
 	<HBox>
 		<Region HBox.hgrow="SOMETIMES"/>
-		<Label text="Version: 0.25.6 // Date: 01.01.2017 // Author: Nash"/>
+		<Label text="Version: 0.25.7 // Date: 25.01.2017 // Author: Nash"/>
 		<Region HBox.hgrow="SOMETIMES"/>
 	</HBox>
 </VBox>

@@ -1,7 +1,7 @@
 package com.nash.phoenix.utils;
 
 public class Status{
-	private  int currTrack; //currTrackNumber from 0 - [tracklist.size()-1]
+	private  int currTrack; //currTrackNumber from 0 - [tracklistView.size()-1]
 	private int autodj; //determines which mode autodj is in (0: off, 1: mode1, 2: mode2, 3: mode3)
 	private double oldVolume = 1.0; // last volume setting
 

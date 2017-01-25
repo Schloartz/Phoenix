@@ -3,7 +3,7 @@ package com.nash.phoenix.utils;
 import com.nash.phoenix.App;
 import javafx.scene.control.ListCell;
 
-public class TracklistCell extends ListCell<Track>{ //Cell for tracklist (listcell!)
+public class TracklistCell extends ListCell<Track>{ //Cell for tracklistView (listcell!)
 
     @Override
     protected void updateItem(Track t, boolean bln) {

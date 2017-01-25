@@ -118,7 +118,7 @@ public class ControlsPresenter implements Initializable{
 		///normal: global variables
 		//Tooltip
 		final Tooltip tooltip = new Tooltip();
-		tooltip.setText("AutoDJ (What happens when tracklist is depleted):\n1) Disabled\n2) Adds one random song\n3) Adds one similar song with good rating\n4) Adds one track from artist/albumartist");
+		tooltip.setText("AutoDJ (What happens when tracklistView is depleted):\n1) Disabled\n2) Adds one random song\n3) Adds one similar song with good rating\n4) Adds one track from artist/albumartist");
 		Tooltip.install(autodj, tooltip);
 		
 	}

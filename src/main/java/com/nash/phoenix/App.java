@@ -9,34 +9,31 @@ import com.nash.phoenix.service.Tracklist;
 import com.nash.phoenix.utils.C;
 import com.nash.phoenix.utils.Flash;
 import com.nash.phoenix.utils.TrackInfo;
+import com.nash.phoenix.views.controls.ControlsPresenter;
 import com.nash.phoenix.views.cover.CoverPresenter;
 import com.nash.phoenix.views.database.DatabasePresenter;
 import com.nash.phoenix.views.main.MainPresenter;
 import com.nash.phoenix.views.main.MainView;
 import com.nash.phoenix.views.menu.MenuPresenter;
 import com.nash.phoenix.views.settings.SettingsPresenter;
-import com.nash.phoenix.views.splash.SplashPresenter;
-import com.nash.phoenix.views.splash.SplashView;
 import com.nash.phoenix.views.tracklist.TracklistPresenter;
-import com.nash.phoenix.views.controls.ControlsPresenter;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef.HWND;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 
 import java.awt.*;
 import java.io.File;
@@ -44,13 +41,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
+import static com.sun.jna.platform.win32.WinUser.GWL_STYLE;
+
 
 public class App extends Application implements IntellitypeListener, HotkeyListener{
 	public static Stage stage;
 	public static ContextMenu contextMenu;
 	private static TrackInfo trackInfo;
 	private static Preferences prefs = Preferences.userRoot().node(App.class.getName()); //includes all user settings for database
-	//Main service providers: mediaplayer, database, tracklist
+	//Main service providers: mediaplayer, database, tracklistView
 	public static Mediaplayer mediaplayer;
 	public static Database database;
 	public static Tracklist tracklist;
@@ -58,7 +57,6 @@ public class App extends Application implements IntellitypeListener, HotkeyListe
 	private static MainView mainView;
 	//Presenters
 	public static MainPresenter mainPresenter;
-	public static SplashPresenter splashPresenter;
 	public static DatabasePresenter databasePresenter;
 	public static MenuPresenter menuPresenter;
 	public static CoverPresenter coverPresenter;
@@ -86,6 +84,7 @@ public class App extends Application implements IntellitypeListener, HotkeyListe
 				mediaplayer = new Mediaplayer();
 				tracklist = new Tracklist();
 				database = new Database();
+				tracklist.restoreTracklist();
 				updateProgress(2.5,3.5);
 				updateMessage("Loading GUI...");
 				App.stage = stage;
@@ -117,26 +116,25 @@ public class App extends Application implements IntellitypeListener, HotkeyListe
 
 	private void showSplash(Stage stage, Task<?> task) {
 		//Scene + Stage
-		SplashView splashView = new SplashView();
-		Scene splashScene = new Scene(splashView.getView(), 185,343);
+		Stage splashView = new Stage();
+		ImageView img = new ImageView(new Image(getClass().getResourceAsStream("/icons/icon_phoenix_large.png")));
+		Scene splashScene = new Scene(new StackPane(img), 185,343);
 		splashScene.setFill(Color.TRANSPARENT);
 		stage.setScene(splashScene);
-		//binding progressproperties
-		splashPresenter.getSplashProgress().progressProperty().bind(task.progressProperty());
-		splashPresenter.getSplashLabel().textProperty().bind(task.messageProperty());
+
 
 
 		task.stateProperty().addListener((observableValue, oldState, newState) -> {
 			if (newState == Worker.State.SUCCEEDED) {
-				splashPresenter.getSplashProgress().progressProperty().unbind();
-				splashPresenter.getSplashLabel().textProperty().unbind();
-				splashPresenter.getSplashProgress().setProgress(1);
 				stage.hide();
 				//Stage
 				Scene scene = new Scene(mainView.getView(),800,600);
 				scene.setOnKeyReleased(e -> {
-					if(e.getCode()==KeyCode.ALT){
+					KeyCode key = e.getCode();
+					if(key==KeyCode.ALT){
 						menuPresenter.toggleView();
+					}else if(key==KeyCode.CONTROL){
+						tracklistPresenter.foldTracklist();
 					}
 				});
 				stage.setScene(scene);
@@ -144,6 +142,18 @@ public class App extends Application implements IntellitypeListener, HotkeyListe
 				stage.show();
 				databasePresenter.getSearch().requestFocus();
 				C.printTime("Show App", starttime); //~500ms
+
+				//Stuff for minimizing by click on taskbaricon (thx to brian from stackoverflow https://stackoverflow.com/questions/26972683/javafx-minimizing-undecorated-stage)
+				long lhwnd = com.sun.glass.ui.Window.getWindows().get(0).getNativeWindow();
+				Pointer lpVoid = new Pointer(lhwnd);
+				HWND hwnd = new HWND(lpVoid);
+				final User32 user32 = User32.INSTANCE;
+				int oldStyle = user32.GetWindowLong(hwnd, GWL_STYLE);
+				//System.out.println(Integer.toBinaryString(oldStyle));
+				int newStyle = oldStyle | 0x00020000;//WS_MINIMIZEBOX
+				//System.out.println(Integer.toBinaryString(newStyle));
+				user32.SetWindowLong(hwnd, GWL_STYLE, newStyle);
+
 				System.out.println("Application has been started ("+((System.currentTimeMillis()-starttime)/1000)+" s)");
 			}
 		});
@@ -173,13 +183,17 @@ public class App extends Application implements IntellitypeListener, HotkeyListe
 		});
 		contextMenu.getItems().addAll(updateFolder, openFolder);
 	}
-	
-	public static void shutdown() { //shuts down all services and frees ressources
+
+	/**
+	 * Shuts down all services (JIntellitype, database, mediaplayer, tracklist) and frees ressources
+	 */
+	public static void shutdown() {
 		JIntellitype.getInstance().cleanUp();
 		if(database.isRunning()){ //close database if it is running
 			database.shutdown();
 		}
 		mediaplayer.disposeOldPlayer();
+		tracklist.saveTracklist();
     	Platform.exit();
         System.exit(0);
 	}

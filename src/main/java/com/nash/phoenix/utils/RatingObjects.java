@@ -18,7 +18,7 @@ public class RatingObjects extends HBox{
 			Star star = new Star(15,6);
 			star.setStrokeWidth(2);
 			star.setStroke(Color.BLACK);
-			star.setFill(Color.WHITE);
+			star.setFill(Color.TRANSPARENT);
 			ratingobjects.add(star);
 			setEventHandling(star, i);
 			this.getChildren().add(star);

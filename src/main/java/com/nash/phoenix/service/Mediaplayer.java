@@ -54,7 +54,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 		 * 		 2) Songs loaded/Pause current
 		 * 		 3) Songs loaded/Play current
 		 */
-		if(App.tracklist.getSize()!=0){ //no songs in tracklist
+		if(App.tracklist.getSize()!=0){ //no songs in tracklistView
 			if(getStatus().getCurrTrack()!=-1){ //no players started yet
 				if(players.size()>0){
 					if(isPlaying()){ //PlayerController is playing -> pause
@@ -70,7 +70,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				playNextSongInTracklist();
 			}
 		}else{
-			System.out.println("ERROR no songs in tracklist");
+			System.out.println("ERROR no songs in tracklistView");
 		}
 	}
 
@@ -122,7 +122,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 			App.tracklist.addAutodjTrack(getStatus().getAutodj());
 			playNextSongInTracklist();
 		}else{
-			System.out.println("ERROR no songs in tracklist OR no next song to play");
+			System.out.println("ERROR no songs in tracklistView OR no next song to play");
 		}
 	}
 
@@ -131,7 +131,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 	private void playNextSongInTracklist(){ //launches new with next media
 		//checks if Media is available --> adds new player
 		File mp3; //mp3 to be played
-		if(App.tracklist.isSubsequentTrack(1)){ //checks if there is another entry in tracklist
+		if(App.tracklist.isSubsequentTrack(1)){ //checks if there is another entry in tracklistView
 			mp3 = new File(App.tracklist.getPath(status.getCurrTrack()+1));
 			//check if file exists
 			if(mp3!=null && mp3.exists()){
@@ -150,7 +150,7 @@ public class Mediaplayer { //Deals mostly with userinput and transmits to GuiUpd
 				System.out.println("ERROR with loading Media: " + App.tracklist.getPath(status.getCurrTrack()+1));
 			}
 		}else{
-			System.out.println("ERROR while trying to play next Song in Tracklist: No entry in tracklist (current: " + (status.getCurrTrack()+1) + " from " + App.tracklist.getSize() + " Songs)");
+			System.out.println("ERROR while trying to play next Song in Tracklist: No entry in tracklistView (current: " + (status.getCurrTrack()+1) + " from " + App.tracklist.getSize() + " Songs)");
 		}
 		
 	}

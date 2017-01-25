@@ -155,9 +155,7 @@ public class Database{
 	}
 
 
-    
-    
-    public void shutdown(){
+	public void shutdown(){
     	try
         {
     		con.close();
@@ -196,8 +194,10 @@ public class Database{
     }
 
 
-
-	public void rebuild() { //rebuilds the database from scratch
+	/**
+	 * Starts a thread and rebuilds the database from scratch
+	 */
+	public void rebuild() {
 		Thread rebuild = new Thread(() -> {
             System.out.println("Starting to rebuild Database");
             long startingTime = System.currentTimeMillis();

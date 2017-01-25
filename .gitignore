@@ -54,8 +54,8 @@ MusicDatabase/
 target/
 src/main/resources/
 
+*.txt
 derby.log
-TODO.txt
 Phoenix.iml
 
 

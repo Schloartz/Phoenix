@@ -236,7 +236,7 @@
 	-fx-border-width: 0;
 }
 
-#menuProgress{
+#rebuildProgress{
 	-fx-accent: highlight-color2;
 	-fx-background-insets: 0;
 }
@@ -254,7 +254,7 @@
 
 }
 
-#tracklist{
+#tracklistView{
 	-fx-padding: 0px;
 	-fx-background-insets: 0;
 	-fx-border-color: foreground-color;
